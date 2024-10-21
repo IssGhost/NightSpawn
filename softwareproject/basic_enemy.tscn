@@ -1,10 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://b4wpmxmaqv5sv"]
+[gd_scene load_steps=6 format=3 uid="uid://b4wpmxmaqv5sv"]
 
-[ext_resource type="Script" path="res://basic_enemy_template.gd" id="1_a1re3"]
-[ext_resource type="PackedScene" path="res://attack_box.tscn" id="2_6o2dh"]
+[ext_resource type="PackedScene" uid="uid://c0jp3kux13enq" path="res://attack_box.tscn" id="2_6o2dh"]
 [ext_resource type="Script" path="res://hurtbox.gd" id="3_3ns3n"]
 [ext_resource type="Script" path="res://fsm.gd" id="4_3otdo"]
-[ext_resource type="PackedScene" path="res://health_bar.tscn" id="5_2urb0"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2mgog"]
 size = Vector2(16, 12)
@@ -14,7 +12,6 @@ size = Vector2(24, 14)
 
 [node name="BasicEnemy" type="CharacterBody2D"]
 collision_layer = 16
-script = ExtResource("1_a1re3")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -5.5)
@@ -65,8 +62,6 @@ one_shot = true
 [node name="Invultimer" type="Timer" parent="."]
 wait_time = 0.25
 one_shot = true
-
-[node name="HealthBar" parent="." instance=ExtResource("5_2urb0")]
 
 [node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="."]
 position = Vector2(0, -10)

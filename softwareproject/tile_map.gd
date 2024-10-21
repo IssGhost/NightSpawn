@@ -1,10 +1,8 @@
 extends TileMap  # This needs to be attached to a TileMap node
 
-var left_door_scene = preload("res://left_door.tscn")
+var top_door_scene = preload("res://top_door.tscn")
 var right_door_scene = preload("res://right_door.tscn")
 @onready var top_door_sprite = $Area2D/TopDoorAnimation  # Make sure you have a node named "TopDoor"
-@onready var bottom_door_sprite = $Area2D/BottomDoorAnimation  # Node named "BottomDoor"
-@onready var left_door_sprite = $Area2D/LeftDoorAnimation  # Node named "LeftDoor"
 @onready var right_door_sprite = $Area2D/RightDoorAnimation  # Node named "RightDoor"
 # Constants
 const MAP_WIDTH = 125
@@ -242,18 +240,18 @@ func spawn_character_in_room():
 
 var enemy_spawn_scene = preload("res://enemy_spawn.tscn")
 var wraith_scene = preload("res://wraith.tscn")
-
+var firey_scene = preload("res://fire_ball.tscn")
 # Dictionary for enemy spawn probabilities (adjustable values)
 var enemy_probabilities = {
 	"Wraith": 0.3,  # 30% chance to spawn a Wraith
-	"Ghost": 0.0,   # Currently set to 0% as a placeholder (set to the desired probability later)
+	"Firey": 0.3,   # Currently set to 0% as a placeholder (set to the desired probability later)
 	"Zombie": 0.0   # Currently set to 0% as a placeholder (set to the desired probability later)
 }
 
 # Dictionary to preload enemy scenes (add scenes as they become available)
 var enemy_scenes = {
 	"Wraith": preload("res://wraith.tscn"),
-	"Ghost": null,  # Placeholder for future enemy scene
+	"Firey": preload("res://fire_ball.tscn"),
 	"Zombie": null  # Placeholder for future enemy scene
 }
 
@@ -302,7 +300,7 @@ func spawn_enemies_in_rooms():
 # Function to choose an enemy type based on the defined probabilities
 func choose_enemy_based_on_probability() -> PackedScene:
 	var rand_value = randf()
-	var cumulative_probability = 0.0
+	var cumulative_probability = 0.6
 
 	for enemy_type in enemy_probabilities.keys():
 		cumulative_probability += enemy_probabilities[enemy_type]
@@ -753,8 +751,6 @@ func place_corridor_tiles():
 			set_cell(layer, Vector2i(x_start + 2, y_end), 2, Vector2i(16, 8))  # Third row of the bottom-right corner
 			set_cell(layer, Vector2i(x_start + 3, y_end), 2, Vector2i(17, 8))
 
-var top_door_scene = preload("res://top_door.tscn")  # Ensure the path is correct
-var bottom_door_scene = preload("res://bottom_door.tscn")  # Ensure the path is correct
 
 func spawn_doors(center: Vector2, is_horizontal: bool):
 	var door_1
