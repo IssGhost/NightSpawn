@@ -1,6 +1,6 @@
 extends Node2D  # The Node2D handles door logic, Area2D handles detection
 
-@onready var animated_sprite = $Area2D/RightDoorAnimation  # Door's AnimatedSprite2D
+@onready var animated_sprite = $Area2D/AnimationPlayer  # Door's AnimatedSprite2D
 @onready var blocking_body = $StaticBody2D  # The StaticBody2D for blocking the player's movement
 @onready var sound_effect = $Area2D/AudioStreamPlayer2D
 var animation_played = false

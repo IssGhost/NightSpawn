@@ -1,15 +1,13 @@
-res://wraith.gd
-res://wraith.tscn
-res://Dungeon_gen.tres
-res://fire_ball.tscn
-res://fire_ball.gd
 res://tile_map.tscn
+res://Dungeon_gen.tres
 res://player.tscn
+res://fire_ball.tscn
 res://projectile_template.tscn
 res://basic_enemy.tscn
+res://wraith.tscn
 res://detection_area.tscn
-res://firey_attack_state.gd
 res://Monster Creature Pack/fireball.tscn
 res://fireball.tscn
-res://projectile.gd
 res://UI.tscn
+res://right_door.tscn
+res://right_door.gd

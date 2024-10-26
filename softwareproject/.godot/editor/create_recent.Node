@@ -1,14 +1,14 @@
+CollisionShape2D
+Sprite2D
+AnimationPlayer
 VBoxContainer
 VSlider
 HBoxContainer
-Sprite2D
 Node
 AnimatedSprite2D
 PointLight2D
 AudioStreamPlayer2D
 Timer
 StaticBody2D
-CollisionShape2D
 Node2D
 Area2D
-DirectionalLight2D
