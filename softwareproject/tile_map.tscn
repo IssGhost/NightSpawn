@@ -12,6 +12,7 @@
 [node name="Node2D" type="Node2D"]
 
 [node name="TileMap" type="TileMap" parent="."]
+position = Vector2(6, 0)
 tile_set = ExtResource("1_xcqr6")
 format = 2
 layer_0/name = "Wall"

@@ -32,16 +32,18 @@ class Room:
 	var enemies = []
 	var doors = []
 	var visited = false
+	
 	func _init(_id, _rect):
 		id = _id
 		rect = _rect
- # Check if the room has enemies
+		
 	func has_enemies() -> bool:
 		for enemy in enemies:
 			if enemy != null and enemy.is_alive():
 				return true
 		return false
-
+	
+	# Method to call when an enemy is defeated
 	func enemy_died(enemy):
 		enemies.erase(enemy)
 		if not has_enemies():
@@ -52,11 +54,28 @@ class Room:
 	func lock_doors():
 		for door in doors:
 			door.lock()
+		print("Doors locked for room", id)
 
 	# Unlock doors once all enemies are defeated
 	func unlock_doors():
 		for door in doors:
 			door.unlock()
+		print("Doors unlocked for room", id)
+
+func _on_enemy_defeated(enemy):
+	var room = get_room_for_enemy(enemy)
+	if room:
+		room.enemies.erase(enemy)
+		print("Enemy defeated in room", room.id, ". Remaining enemies:", room.enemies.size())
+
+		# If no enemies are left, unlock the doors
+		if room.enemies.size() == 0:
+			room.unlock_doors()
+			print("All enemies defeated in room", room.id, ". Doors unlocked.")
+	else:
+		print("Error: Room not found for defeated enemy.")
+
+
 
 # Union-Find class for Kruskal's algorithm
 class UnionFind:
@@ -272,7 +291,7 @@ var firey_scene = preload("res://fire_ball.tscn")
 # Dictionary for enemy spawn probabilities (adjustable values)
 var enemy_probabilities = {
 	"Wraith": 0.3,  # 30% chance to spawn a Wraith
-	"Firey": 0.3,   # Currently set to 0% as a placeholder (set to the desired probability later)
+	"Firey": 0.0,   # Currently set to 0% as a placeholder (set to the desired probability later)
 	"Zombie": 0.0   # Currently set to 0% as a placeholder (set to the desired probability later)
 }
 
@@ -292,7 +311,7 @@ func spawn_enemies_in_room(room: Room):
 	print("Spawning enemies in room", room.id)
 
 	# Number of enemies to spawn in this room
-	var enemy_count = randi_range(3, 6)
+	var enemy_count = randi_range(1, 2)
 
 	# Reference for where to add enemies
 	var enemy_container = self  # Using the current node as the container
@@ -318,25 +337,11 @@ func spawn_enemies_in_room(room: Room):
 		else:
 			print("Error: No valid enemy scene to instantiate.")
 
-
-
-func _on_enemy_defeated(enemy):
-	var room = get_room_for_enemy(enemy)
-	if room:
-		room.enemies.erase(enemy)
-		print("Enemy defeated in room ", room.id, ". Remaining enemies: ", room.enemies.size())
-		if room.enemies.size() == 0:
-			room.unlock_doors()
-			print("All enemies defeated in room ", room.id, ". Doors unlocked.")
-
-
 func get_room_for_area2d(area2d: Area2D) -> Room:
 	if room_area_detectors.has(area2d):
 		return room_area_detectors[area2d]
 	print("No matching room found for the Area2D. Total rooms checked:", room_area_detectors.size())
 	return null
-
-
 
 # Function to find the room an enemy belongs to
 func get_room_for_enemy(enemy) -> Room:
@@ -371,9 +376,8 @@ func add_area2d_to_room(room: Room):
 
 
 
-func _on_player_entered_room(room_id):
-	print("Player entered room:", room_id)
 
+func _on_player_entered_room(room_id):
 	var room = get_room_by_id(room_id)
 	if room == null:
 		print("Room not found for ID:", room_id)
@@ -381,11 +385,20 @@ func _on_player_entered_room(room_id):
 
 	if not room.visited:
 		room.visited = true
-		room.lock_doors()
+		room.lock_doors()  # Lock doors when entering
 		spawn_enemies_in_room(room)
 		print("Room", room_id, "locked and enemies spawned.")
 	else:
 		print("Room already visited:", room_id)
+
+
+func add_door_to_room(room: Room, door_instance: Node2D):
+	if room:
+		room.doors.append(door_instance)
+		print("Added door to room", room.id)
+	else:
+		print("Error: Room not found for the door at position", door_instance.position)
+
 		
 func get_room_by_id(room_id: int) -> Room:
 	for room in root_leaf.rooms:
@@ -873,38 +886,26 @@ func place_corridor_tiles():
 			set_cell(layer, Vector2i(x_start + 3, y_end), 2, Vector2i(17, 8))
 
 
+# Modified spawn_doors function to keep track of the door instances
 func spawn_doors(center: Vector2, is_horizontal: bool):
-	var door_1
-	var door_2
+	var door_instance
 
-	# For horizontal corridors, use top and bottom doors
+	# For horizontal corridors, use top doors
 	if is_horizontal:
-		#door_1 = top_door_scene.instantiate() as Node2D
-		door_2 = top_door_scene.instantiate() as Node2D
-
-		# Set their positions
-		#door_1.position = (center + Vector2(0, -0.5)) * 32  # Top door
-		door_2.position = (center + Vector2(1.5, 1.35)) * 32   # Bottom door
-
-		# Add the doors to the scene
-		#add_child(door_1)
-		add_child(door_2)
-
-	# For vertical corridors, use left and right doors
+		door_instance = top_door_scene.instantiate() as Node2D
+		door_instance.position = (center + Vector2(1.5, 1.35)) * 32   # Position for top door
 	else:
-		#door_1 = left_door_scene.instantiate() as Node2D
-		door_2 = right_door_scene.instantiate() as Node2D
+		# For vertical corridors, use right doors
+		door_instance = right_door_scene.instantiate() as Node2D
+		door_instance.position = (center + Vector2(0.5, 1.35)) * 32  # Position for right door
 
-		# Set their positions
-		#door_1.position = (center + Vector2(-0.5, 0)) * 32  # Left door
-		door_2.position = (center + Vector2(.5, 1.35)) * 32  # Adjust Vector2(0, 0) to fine-tune the position if needed
+	# Add the door instance to the scene and to the appropriate room
+	add_child(door_instance)
+	var room = get_room_for_area2d(area2d_container)
+	if room:
+		room.doors.append(door_instance)  # Add the door to the room's list of doors
+		print("Added door to room:", room.id)
 
-
-		# Add the doors to the scene
-		#add_child(door_1)
-		add_child(door_2)
-
-	#print("Doors spawned at positions: ", door_1.position, " and ", door_2.position)
 
 # Camera movement and zooming using WASD and -/= keys
 func _process(delta):
