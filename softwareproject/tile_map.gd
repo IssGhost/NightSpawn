@@ -290,7 +290,7 @@ var wraith_scene = preload("res://wraith.tscn")
 var firey_scene = preload("res://fire_ball.tscn")
 # Dictionary for enemy spawn probabilities (adjustable values)
 var enemy_probabilities = {
-	"Wraith": 0.3,  # 30% chance to spawn a Wraith
+	"Wraith": 1.0,  # 30% chance to spawn a Wraith
 	"Firey": 0.0,   # Currently set to 0% as a placeholder (set to the desired probability later)
 	"Zombie": 0.0   # Currently set to 0% as a placeholder (set to the desired probability later)
 }
@@ -311,7 +311,7 @@ func spawn_enemies_in_room(room: Room):
 	print("Spawning enemies in room", room.id)
 
 	# Number of enemies to spawn in this room
-	var enemy_count = randi_range(1, 2)
+	var enemy_count = randi_range(6, 12)
 
 	# Reference for where to add enemies
 	var enemy_container = self  # Using the current node as the container
