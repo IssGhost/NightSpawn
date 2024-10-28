@@ -50,8 +50,6 @@ scale = Vector2(6.66667, 6.66667)
 texture = ExtResource("4_wrs6k")
 texture_scale = 0.4
 
-[node name="Area2DContainer" type="Node" parent="TileMap"]
-
 [node name="BossRoom" parent="." instance=ExtResource("3_axnmo")]
 
 [node name="ShopRoom" parent="." instance=ExtResource("4_lge64")]

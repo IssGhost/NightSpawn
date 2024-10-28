@@ -2,8 +2,6 @@ extends TileMap  # This needs to be attached to a TileMap node
 
 var top_door_scene = preload("res://top_door.tscn")
 var right_door_scene = preload("res://right_door.tscn")
-@onready var top_door_sprite = $Area2D/TopDoorAnimation  # Make sure you have a node named "TopDoor"
-@onready var right_door_sprite = $Area2D/RightDoorAnimation  # Node named "RightDoor"
 # Constants
 const MAP_WIDTH = 125
 const MAP_HEIGHT = 100
@@ -18,6 +16,8 @@ const ZOOM_SPEED = 0.5  # Speed for zooming the camera
 var boss_label
 var shop_label
 var chest_label
+# Global dictionary to store Area2D references for each room
+var room_area_detectors = {}
 
 # Global variables
 var leaves = []
@@ -30,10 +30,33 @@ class Room:
 	var rect
 	var connections = []
 	var enemies = []
-
+	var doors = []
+	var visited = false
 	func _init(_id, _rect):
 		id = _id
 		rect = _rect
+ # Check if the room has enemies
+	func has_enemies() -> bool:
+		for enemy in enemies:
+			if enemy != null and enemy.is_alive():
+				return true
+		return false
+
+	func enemy_died(enemy):
+		enemies.erase(enemy)
+		if not has_enemies():
+			unlock_doors()  # Unlock doors when all enemies are defeated
+			print("All enemies defeated in room", id)
+
+	# Lock doors to prevent player from leaving
+	func lock_doors():
+		for door in doors:
+			door.lock()
+
+	# Unlock doors once all enemies are defeated
+	func unlock_doors():
+		for door in doors:
+			door.unlock()
 
 # Union-Find class for Kruskal's algorithm
 class UnionFind:
@@ -218,24 +241,29 @@ class Leaf:
 		return edge_point
 
 
+var initial_room: Room = null
+
 func spawn_character_in_room():
-	# Ensure rooms are available
 	if root_leaf.rooms.size() == 0:
 		print("No rooms available to spawn the player.")
 		return
 
 	# Choose a random room for the player to spawn in
-	var spawn_room = root_leaf.rooms[randi_range(0, root_leaf.rooms.size() - 1)]
+	initial_room = root_leaf.rooms[randi_range(0, root_leaf.rooms.size() - 1)]
 
 	# Get a random position within the room's bounds
-	var spawn_x = int(randf_range(spawn_room.rect.position.x + 1, spawn_room.rect.position.x + spawn_room.rect.size.x - 1))
-	var spawn_y = int(randf_range(spawn_room.rect.position.y + 1, spawn_room.rect.position.y + spawn_room.rect.size.y - 1))
+	var spawn_x = int(randf_range(initial_room.rect.position.x + 1, initial_room.rect.position.x + initial_room.rect.size.x - 1))
+	var spawn_y = int(randf_range(initial_room.rect.position.y + 1, initial_room.rect.position.y + initial_room.rect.size.y - 1))
 
-	# Set the player's position (assuming the player node is named "player")
-	var player = $player  # Replace with the correct path if needed
-	player.position = Vector2(spawn_x, spawn_y) * 32  # Assuming 32x32 tiles
+	# Set the player's position
+	var player = $player
+	player.position = Vector2(spawn_x, spawn_y) * 32
 
-	print("Player spawned in room at position: ", player.position)
+	# Mark the initial room as visited and unlock its doors
+	initial_room.visited = true
+	initial_room.unlock_doors()
+	print("Player spawned in initial room ", initial_room.id, " at position: ", player.position)
+
 
 
 var enemy_spawn_scene = preload("res://enemy_spawn.tscn")
@@ -256,79 +284,172 @@ var enemy_scenes = {
 }
 
 
-# Function to spawn enemies in rooms
-func spawn_enemies_in_rooms():
-	# Ensure rooms are available
-	if root_leaf.rooms.size() == 0:
-		print("No rooms available to spawn enemies.")
-		return
+func spawn_enemies_in_room(room: Room):
+	if room.enemies.size() > 0:
+		print("Enemies already spawned in room", room.id)
+		return  # Avoid spawning again if enemies already exist
 
-	# Reference the node where enemies should be added
+	print("Spawning enemies in room", room.id)
+
+	# Number of enemies to spawn in this room
+	var enemy_count = randi_range(3, 6)
+
+	# Reference for where to add enemies
 	var enemy_container = self  # Using the current node as the container
 
-	var num_rooms_to_spawn = randi_range(1, root_leaf.rooms.size())
+	for i in range(enemy_count):
+		# Get a random position within the room's bounds
+		var spawn_x = int(randf_range(room.rect.position.x + 1, room.rect.position.x + room.rect.size.x - 1))
+		var spawn_y = int(randf_range(room.rect.position.y + 1, room.rect.position.y + room.rect.size.y - 1))
 
-	var rooms_to_spawn_in = root_leaf.rooms.duplicate()
-	rooms_to_spawn_in.shuffle()
+		# Choose an enemy based on probabilities
+		var enemy_scene = choose_enemy_based_on_probability()
 
-	for i in range(num_rooms_to_spawn):
-		var spawn_room = rooms_to_spawn_in[i]
-		var num_enemies = randi_range(3, 6)
-
-		for j in range(num_enemies):
-			# Get a random position within the room's bounds
-			var spawn_x = int(randf_range(spawn_room.rect.position.x + 1, spawn_room.rect.position.x + spawn_room.rect.size.x - 1))
-			var spawn_y = int(randf_range(spawn_room.rect.position.y + 1, spawn_room.rect.position.y + spawn_room.rect.size.y - 1))
-
-			# Select an enemy type based on probability
-			var enemy_scene = choose_enemy_based_on_probability()
+		# Spawn an enemy using an animation sequence if the enemy scene is available
+		if enemy_scene != null:
+			var spawn_instance = enemy_spawn_scene.instantiate()
+			spawn_instance.position = Vector2(spawn_x, spawn_y) * 32
+			enemy_container.add_child(spawn_instance)
 			
-			# Instance the enemy spawn animation scene instead of the enemy directly
-			if enemy_scene != null:
-				var spawn_instance = enemy_spawn_scene.instantiate()
-				spawn_instance.position = Vector2(spawn_x, spawn_y) * 32
-				enemy_container.add_child(spawn_instance)
-
-				# Start the spawn process with the enemy scene to spawn after animation
-				spawn_instance.start_spawn_process(enemy_scene)
-
-				print("Spawn animation triggered in room at position: ", spawn_instance.position)
-			else:
-				print("Error: No valid enemy scene to instantiate.")
+			spawn_instance.start_spawn_process(enemy_scene)
+			# Track the spawned enemy in the room's enemy list
+			room.enemies.append(spawn_instance)
+			print("Spawned enemy in room", room.id, "at position:", spawn_instance.position)
+		else:
+			print("Error: No valid enemy scene to instantiate.")
 
 
-# Function to choose an enemy type based on the defined probabilities
+
+func _on_enemy_defeated(enemy):
+	var room = get_room_for_enemy(enemy)
+	if room:
+		room.enemies.erase(enemy)
+		print("Enemy defeated in room ", room.id, ". Remaining enemies: ", room.enemies.size())
+		if room.enemies.size() == 0:
+			room.unlock_doors()
+			print("All enemies defeated in room ", room.id, ". Doors unlocked.")
+
+
+func get_room_for_area2d(area2d: Area2D) -> Room:
+	if room_area_detectors.has(area2d):
+		return room_area_detectors[area2d]
+	print("No matching room found for the Area2D. Total rooms checked:", room_area_detectors.size())
+	return null
+
+
+
+# Function to find the room an enemy belongs to
+func get_room_for_enemy(enemy) -> Room:
+	for room in root_leaf.rooms:
+		if enemy in room.enemies:
+			return room
+	return null
+
+@onready var area2d_container: Node2D = $TileMap/Area2DContainer
+@onready var detection_area_scene = preload("res://room_detection.tscn")
+
+func add_area2d_to_room(room: Room):
+	# Instantiate the DetectionArea scene
+	var detection_area = detection_area_scene.instantiate() as Area2D
+	detection_area.room_id = room.id
+
+	# Set the position and size of the DetectionArea
+	detection_area.position = (room.rect.position + room.rect.size / 2) * 32  # Center the Area2D in the room
+	var collision_shape = detection_area.get_node("CollisionShape2D") as CollisionShape2D
+	if collision_shape != null:
+		collision_shape.shape.extents = room.rect.size * 16  # Assuming room size is in tiles
+
+	# Add the instantiated DetectionArea to the container
+	area2d_container.add_child(detection_area)
+
+	# Connect the custom player_entered signal
+	detection_area.connect("player_entered", Callable(self, "_on_player_entered_room"))
+
+	# Map the DetectionArea to the room
+	room_area_detectors[detection_area] = room
+	print("Created Area2D for room ID:", room.id)
+
+
+
+func _on_player_entered_room(room_id):
+	print("Player entered room:", room_id)
+
+	var room = get_room_by_id(room_id)
+	if room == null:
+		print("Room not found for ID:", room_id)
+		return
+
+	if not room.visited:
+		room.visited = true
+		room.lock_doors()
+		spawn_enemies_in_room(room)
+		print("Room", room_id, "locked and enemies spawned.")
+	else:
+		print("Room already visited:", room_id)
+		
+func get_room_by_id(room_id: int) -> Room:
+	for room in root_leaf.rooms:
+		if room.id == room_id:
+			return room
+	return null
+
+
+func print_room_mappings():
+	print("Room-Area2D Mapping:")
+	for area2d in room_area_detectors.keys():
+		var room = room_area_detectors[area2d]
+		print("Area2D:", area2d, "Room ID:", room.id, "Position:", area2d.position)
+
+
+
+
+
 func choose_enemy_based_on_probability() -> PackedScene:
 	var rand_value = randf()
-	var cumulative_probability = 0.6
+	var cumulative_probability = 0.0
 
 	for enemy_type in enemy_probabilities.keys():
 		cumulative_probability += enemy_probabilities[enemy_type]
 		if rand_value < cumulative_probability:
 			if enemy_scenes[enemy_type] != null:
+				print("Chose enemy type: ", enemy_type)
 				return enemy_scenes[enemy_type]
 			else:
 				print("Warning: Enemy scene for '%s' not yet available." % enemy_type)
 
+	print("No enemy type selected, returning null.")
 	return null  # If no valid scene is found, return null
 
 
-# Main _ready function
+
 func _ready():
+	# Initialize labels, dungeon seed, and generate dungeon layout
 	boss_label = $BossLabel
 	shop_label = $ShopLabel
 	chest_label = $ChestLabel
+
 	initialize_seed()
 	randomize()
 	generate_level()
 	place_tiles()  # Place room tiles
 	place_corridor_tiles()  # Place corridor tiles
-	#place_horizontal_path_tiles()
+
+	# Ensure Area2DContainer exists or create it
+	if not area2d_container:
+		area2d_container = Node2D.new()
+		area2d_container.name = "Area2DContainer"
+		add_child(area2d_container)
 
 	# Set the room labels after the dungeon is generated
 	set_room_labels()
 	spawn_character_in_room()
-	spawn_enemies_in_rooms()
+
+	# Add Area2D detectors for each room based on room dimensions
+	for room in root_leaf.rooms:
+		add_area2d_to_room(room)
+
+	print("Dungeon setup complete.")
+	print_room_mappings()
 
 	# Initialize the random seed
 func initialize_seed(seed_value = 0):
@@ -776,7 +897,7 @@ func spawn_doors(center: Vector2, is_horizontal: bool):
 
 		# Set their positions
 		#door_1.position = (center + Vector2(-0.5, 0)) * 32  # Left door
-		door_2.position = (center + Vector2(-2.25, 1.25)) * 32  # Adjust Vector2(0, 0) to fine-tune the position if needed
+		door_2.position = (center + Vector2(.5, 1.35)) * 32  # Adjust Vector2(0, 0) to fine-tune the position if needed
 
 
 		# Add the doors to the scene

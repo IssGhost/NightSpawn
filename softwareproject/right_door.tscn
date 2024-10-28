@@ -57,89 +57,12 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="Animation" id="Animation_4qtfp"]
-resource_name = "Right"
-length = 0.5
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 1,
-"values": [0, 1, 2, 3, 4]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("AudioStreamPlayer2D:stream")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("3_nm4hl")]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Sprite2D/left:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(-38.5, -12), Vector2(-43.5, -12), Vector2(-45.5, -12), Vector2(-50.5, -12), Vector2(-55.5, -12)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Sprite2D/left:scale")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(1, 1), Vector2(0.875, 1), Vector2(0.8, 1), Vector2(0.65, 1), Vector2(0.5, 1)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Sprite2D/right:position")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(38.75, -12), Vector2(43.5, -12), Vector2(45.5, -12), Vector2(50.5, -12), Vector2(55.5, -12)]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("Sprite2D/right:scale")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(1, 1), Vector2(0.875, 1), Vector2(0.8, 1), Vector2(0.65, 1), Vector2(0.5, 1)]
-}
-
 [sub_resource type="Animation" id="Animation_ac2dd"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/path = NodePath("StaticBody2D/Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -151,69 +74,190 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("AudioStreamPlayer2D:stream")
+tracks/1/path = NodePath("StaticBody2D/left:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("3_nm4hl")]
+"update": 0,
+"values": [Vector2(-38.5, -12)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Sprite2D/left:position")
+tracks/2/path = NodePath("StaticBody2D/left:scale")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-38.5, -12)]
+"values": [Vector2(1, 1)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Sprite2D/left:scale")
+tracks/3/path = NodePath("StaticBody2D/right:position")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(1, 1)]
+"values": [Vector2(38.75, -12)]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Sprite2D/right:position")
+tracks/4/path = NodePath("StaticBody2D/right:scale")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(38.75, -12)]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("Sprite2D/right:scale")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
 "values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_vqny5"]
+resource_name = "Close"
+length = 0.5
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("StaticBody2D/Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [5, 4, 3, 2, 1, 0, 4]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("StaticBody2D/left:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(-65, -12), Vector2(-63, -12), Vector2(-60, -12), Vector2(-50.5, -12), Vector2(-45, -12), Vector2(-48, -12)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("StaticBody2D/left:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0.3, 1), Vector2(0.5, 1), Vector2(0.8, 1), Vector2(0.85, 1), Vector2(0.9, 1.059), Vector2(1.25, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("StaticBody2D/right:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(65, -12), Vector2(63, -12), Vector2(60, -12), Vector2(50.5, -12), Vector2(45, -12), Vector2(48, -12)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("StaticBody2D/right:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0.3, 1), Vector2(0.5, 1), Vector2(0.8, 1), Vector2(0.85, 1), Vector2(0.9, 1.059), Vector2(1.25, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_4qtfp"]
+resource_name = "Open"
+length = 0.5
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("StaticBody2D/Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("StaticBody2D/left:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(-38.5, -12), Vector2(-43.5, -12), Vector2(-45.5, -12), Vector2(-50.5, -12), Vector2(-55.5, -12)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("StaticBody2D/left:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.875, 1), Vector2(0.8, 1), Vector2(0.65, 1), Vector2(0.5, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("StaticBody2D/right:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(38.75, -12), Vector2(43.5, -12), Vector2(45.5, -12), Vector2(50.5, -12), Vector2(55.5, -12)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("StaticBody2D/right:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.875, 1), Vector2(0.8, 1), Vector2(0.65, 1), Vector2(0.5, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_lsrob"]
 _data = {
-"RESET": SubResource("Animation_ac2dd"),
-"Right": SubResource("Animation_4qtfp")
+"Close": SubResource("Animation_vqny5"),
+"Open": SubResource("Animation_4qtfp"),
+"RESET": SubResource("Animation_ac2dd")
 }
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_npqy1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ynkri"]
 size = Vector2(77, 24)
@@ -221,19 +265,13 @@ size = Vector2(77, 24)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rip1k"]
 size = Vector2(77.5, 24)
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_npqy1"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_dom0h"]
-size = Vector2(202, 27)
-
 [node name="RightDoor" type="Node2D"]
 script = ExtResource("1_onjqo")
 
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-visible = false
-position = Vector2(94, 14.5)
+position = Vector2(7.62939e-06, -15)
 scale = Vector2(1.25, 1.25)
 shape = SubResource("RectangleShape2D_kltdr")
 
@@ -252,29 +290,22 @@ libraries = {
 "": SubResource("AnimationLibrary_lsrob")
 }
 
-[node name="Sprite2D" type="Sprite2D" parent="Area2D"]
-position = Vector2(106, 0)
-scale = Vector2(1.4, 1.4)
-texture = ExtResource("2_ixwvg")
-hframes = 6
-
-[node name="left" type="CollisionShape2D" parent="Area2D/Sprite2D"]
-position = Vector2(-38.5, -12)
-shape = SubResource("RectangleShape2D_ynkri")
-
-[node name="right" type="CollisionShape2D" parent="Area2D/Sprite2D"]
-position = Vector2(38.75, -12)
-shape = SubResource("RectangleShape2D_rip1k")
-
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
+[node name="StaticBody2D" type="StaticBody2D" parent="Area2D"]
 collision_layer = 2
 physics_material_override = SubResource("PhysicsMaterial_npqy1")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-position = Vector2(91, 13.5)
-shape = SubResource("RectangleShape2D_dom0h")
-disabled = true
+[node name="Sprite2D" type="Sprite2D" parent="Area2D/StaticBody2D"]
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("2_ixwvg")
+hframes = 6
+
+[node name="left" type="CollisionShape2D" parent="Area2D/StaticBody2D"]
+position = Vector2(-38.5, -12)
+shape = SubResource("RectangleShape2D_ynkri")
+
+[node name="right" type="CollisionShape2D" parent="Area2D/StaticBody2D"]
+position = Vector2(38.75, -12)
+shape = SubResource("RectangleShape2D_rip1k")
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
-[connection signal="animation_finished" from="Area2D/RightDoorAnimation" to="." method="_on_animation_finished"]
 [connection signal="animation_finished" from="Area2D/AnimationPlayer" to="." method="_on_animation_finished"]

@@ -1,14 +1,14 @@
 CollisionShape2D
-Sprite2D
+Area2D
+Node
 AnimationPlayer
+Sprite2D
 VBoxContainer
 VSlider
 HBoxContainer
-Node
 AnimatedSprite2D
 PointLight2D
 AudioStreamPlayer2D
 Timer
 StaticBody2D
 Node2D
-Area2D

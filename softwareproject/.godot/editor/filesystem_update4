@@ -1,5 +1,6 @@
-res://tile_map.tscn
+res://right_door.tscn
 res://Dungeon_gen.tres
+res://tile_map.tscn
 res://player.tscn
 res://fire_ball.tscn
 res://projectile_template.tscn
@@ -8,6 +9,9 @@ res://wraith.tscn
 res://detection_area.tscn
 res://Monster Creature Pack/fireball.tscn
 res://fireball.tscn
-res://UI.tscn
-res://right_door.tscn
+res://top_door.tscn
 res://right_door.gd
+res://top_door.gd
+res://tile_map.gd
+res://room_detection.tscn
+res://room_detection.gd
