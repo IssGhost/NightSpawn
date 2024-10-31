@@ -4,12 +4,12 @@ var speed: float = 100.0
 var direction: Vector2 = Vector2.ZERO
 
 func enter_state(_previous_state: State):
-	print("Entering RunState")
+	#print("Entering RunState")
 
 	# Pick a random direction at the start
 	direction = get_random_direction()
 	actor.current_direction = direction
-	print("Moving in direction: ", direction)
+	#print("Moving in direction: ", direction)
 
 	move_and_play_animation()
 
@@ -32,14 +32,14 @@ func move_and_check_for_collisions():
 
 		# Check for collision
 		if actor.get_last_slide_collision() != null:
-			print("Collision detected, changing direction")
+			#print("Collision detected, changing direction")
 			change_direction()
 
 		# Play the correct animation based on direction
 		move_and_play_animation()
 	else:
-		print("Actor is not moving in RunState")
-
+		#print("Actor is not moving in RunState")
+		pass
 # Function to change the direction after collision
 func change_direction():
 	var new_direction = get_random_direction()
@@ -49,7 +49,7 @@ func change_direction():
 		new_direction = get_random_direction()
 
 	actor.current_direction = new_direction
-	print("Changed direction to: ", actor.current_direction)
+	#print("Changed direction to: ", actor.current_direction)
 
 # Function to randomly choose a direction for the Wraith to move
 func get_random_direction() -> Vector2:

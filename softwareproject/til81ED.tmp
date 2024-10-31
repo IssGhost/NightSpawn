@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://d2fon4hhhahop"]
+[gd_scene load_steps=9 format=3 uid="uid://d2fon4hhhahop"]
 
 [ext_resource type="TileSet" uid="uid://dj58jn31qyjv4" path="res://Dungeon_gen.tres" id="1_xcqr6"]
 [ext_resource type="Script" path="res://tile_map.gd" id="2_qoqut"]
@@ -8,9 +8,6 @@
 [ext_resource type="PackedScene" uid="uid://bvbg6f6nq5lgh" path="res://chest_room.tscn" id="5_hm6bi"]
 [ext_resource type="Script" path="res://shop_room.gd" id="5_r03wy"]
 [ext_resource type="PackedScene" uid="uid://bunoftyokcv2c" path="res://player.tscn" id="7_puafu"]
-[ext_resource type="PackedScene" uid="uid://b0n6nnxfmc8ab" path="res://HealthUI.tscn" id="9_20blq"]
-[ext_resource type="PackedScene" uid="uid://c52shjr7m8dbb" path="res://ActivatableBox.tscn" id="10_md75y"]
-[ext_resource type="PackedScene" uid="uid://d1s8uyp8mfmv" path="res://WeaponBox.tscn" id="11_ew2le"]
 
 [node name="Node2D" type="Node2D"]
 
@@ -76,23 +73,6 @@ color = Color(0, 0, 0, 1)
 visible = false
 color = Color(0, 0, 0, 1)
 
-[node name="Control" parent="." instance=ExtResource("9_20blq")]
-
-[node name="Activatable" parent="Control" instance=ExtResource("10_md75y")]
-offset_left = 17.0
-offset_top = -267.0
-offset_right = 177.0
-offset_bottom = -227.0
-scale = Vector2(3, 3)
-
-[node name="Weapon" parent="Control" instance=ExtResource("11_ew2le")]
-offset_left = -489.0
-offset_top = -273.0
-offset_right = -489.0
-offset_bottom = -233.0
-scale = Vector2(3, 3)
-
 [editable path="TileMap/player"]
 [editable path="TileMap/player/AttackBox"]
 [editable path="TileMap/player/Hurtbox"]
-[editable path="Control"]

@@ -9,13 +9,14 @@ extends CharacterBody2D
 var current_dir = "none"
 var is_attacking = false
 var attack_damage = 10  # Damage dealt by the player when attacking
+var health_ui
 
 func _ready():
 	anim.play("front_idle")
 	attack_box.connect("body_entered", Callable(self, "_on_attack_box_body_entered"))
 	anim.connect("animation_finished", Callable(self, "_on_animation_finished"))
 	add_to_group("player")
-
+	health_ui = get_node("/root/HealthUI")
 func _physics_process(delta):
 	if not is_attacking:  # Only allow movement if the player is not attacking
 		player_movement(delta)
@@ -132,4 +133,7 @@ func _on_attack_box_body_entered(body):
 func take_damage(amount: int):
 	# Implement logic to reduce player's health
 	print("Player took damage: ", amount)
-	# You can include additional logic like playing a hurt animation or triggering invincibility
+	#health_ui.decrease_health(amount)
+	
+#func heal(amount: int):
+	#health_ui.increase_health(amount)

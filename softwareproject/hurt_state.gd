@@ -14,7 +14,7 @@ func enter_state(_prev_state: State):
 		return
 
 	# Create the Callable object for the animation_finished method
-	var animation_callable = Callable(self, "animation_finished")
+	var animation_callable = Callable(self, "_on_hurt_animation_finished")
 
 	# Connect the animation finished signal to this state's function (if not already connected)
 	if not animator.is_connected("animation_finished", animation_callable):
@@ -22,12 +22,6 @@ func enter_state(_prev_state: State):
 
 	print("Actor took damage, playing hurt animation")
 	actor.take_damage(10)  # Apply damage to the actor
-
-	# Transition to DieState if health is zero or below
-	if actor.current_health <= 0:
-		print("Wraith has no health left, transitioning to DieState")
-		transition.emit("DieState")
-		return
 
 	# Play the hurt animation based on the direction the Wraith was facing
 	match actor.last_direction:
@@ -45,6 +39,12 @@ func enter_state(_prev_state: State):
 	print("Hurt animation should now be playing")
 	actor.velocity = Vector2.ZERO
 
+	# Check if the actor has health left after taking damage
+	if actor.current_health <= 0:
+		print("Wraith has no health left, transitioning to DieState")
+		transition.emit("DieState")
+		return
+
 	# Add a small timer to transition back to RunState after HurtState is over
 	var hurt_timer = Timer.new()
 	hurt_timer.wait_time = 0.5
@@ -56,3 +56,7 @@ func enter_state(_prev_state: State):
 func _on_hurt_timer_timeout():
 	if actor.current_health > 0:
 		transition.emit("RunState")
+
+func _on_hurt_animation_finished(anim_name: String):
+	# This function can also check if the animation was "hurt" before transitioning
+	print("Hurt animation finished for", anim_name)

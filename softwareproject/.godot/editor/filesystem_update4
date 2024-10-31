@@ -1,6 +1,5 @@
-res://right_door.tscn
-res://Dungeon_gen.tres
 res://tile_map.tscn
+res://Dungeon_gen.tres
 res://player.tscn
 res://fire_ball.tscn
 res://projectile_template.tscn
@@ -10,8 +9,25 @@ res://detection_area.tscn
 res://Monster Creature Pack/fireball.tscn
 res://fireball.tscn
 res://top_door.tscn
-res://right_door.gd
-res://top_door.gd
-res://tile_map.gd
+res://right_door.tscn
 res://room_detection.tscn
 res://room_detection.gd
+res://tile_map.gd
+res://wraith.gd
+res://wraith_attack_state.gd
+res://wraith_follow_state.gd
+res://wraith_run_state.gd
+res://hurtbox.gd
+res://fsm.gd
+res://hurt_state.gd
+res://wraith_die_state.gd
+res://top_door.gd
+res://UI.tscn
+res://health_ui.gd
+res://Heart.tscn
+res://player.gd
+res://HealthUI.tscn
+res://WeaponBox.tscn
+res://ActivatableBox.tscn
+res://MainUI.tscn
+res://right_door.gd

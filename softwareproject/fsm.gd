@@ -35,10 +35,10 @@ func transition(new_state: String):
 func change_state(_previous_state: State, new_state : State):
 	if new_state is State:
 		if current_state:
-			print("Exiting state: ", current_state.name)
+			#print("Exiting state: ", current_state.name)
 			current_state.exit_state()
 
-		print("Entering state: ", new_state.name)
+		#print("Entering state: ", new_state.name)
 		new_state.enter_state(previous_state)
 		new_state.is_current = true
 		current_state = new_state

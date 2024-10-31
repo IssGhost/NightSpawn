@@ -11,7 +11,7 @@ var can_attack: bool = true
 
 # Called when entering the state
 func enter_state(_previous_state: State):
-	print("Entering AttackState")
+	#print("Entering AttackState")
 	
 	# Only attack if cooldown allows it
 	if can_attack and actor.player:
@@ -65,12 +65,12 @@ func deal_damage():
 
 # Called when the attack animation is finished
 func _on_attack_timer_timeout():
-	print("Attack finished, transitioning to FollowState")
+	#print("Attack finished, transitioning to FollowState")
 	transition.emit("FollowState")  # Move back to follow state or idle state after attacking
 
 # Called when the cooldown timer finishes
 func _on_cooldown_timeout():
-	print("Cooldown finished, can attack again")
+	#print("Cooldown finished, can attack again")
 	can_attack = true
 	
 	# After the cooldown, check if the player is still in range
@@ -82,4 +82,5 @@ func _on_cooldown_timeout():
 		transition.emit("FollowState")
 
 func exit_state():
-	print("Exiting AttackState")
+	#print("Exiting AttackState")
+	pass

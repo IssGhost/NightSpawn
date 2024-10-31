@@ -1,3 +1,8 @@
+TextureRect
+Control
+CanvasLayer
+HBoxContainer
+AnimatedSprite2D
 CollisionShape2D
 Area2D
 Node
@@ -5,10 +10,5 @@ AnimationPlayer
 Sprite2D
 VBoxContainer
 VSlider
-HBoxContainer
-AnimatedSprite2D
 PointLight2D
 AudioStreamPlayer2D
-Timer
-StaticBody2D
-Node2D

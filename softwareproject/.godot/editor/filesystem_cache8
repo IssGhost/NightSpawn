@@ -1,34 +1,35 @@
 ea4bc82a6ad023ab7ee23ee620429895
-::res://::1730052424
+::res://::1730340230
 archer spritesheet.png::CompressedTexture2D::1153056308114544960::1729550968::1730052426::1::::<><>::
 attack_box.gd::GDScript::-1::1729978868::0::1::::AttackBox<>Area2D<>::
 attack_box.tscn::PackedScene::6547103172454838586::1729550968::0::1::::<><>::res://attack_box.gd
-basic_enemy.tscn::PackedScene::4468246870800659353::1729986231::0::1::::<><>::uid://c0jp3kux13enq::::res://attack_box.tscn<>res://hurtbox.gd<>res://fsm.gd
+basic_enemy.tscn::PackedScene::4468246870800659353::1730339144::0::1::::<><>::uid://c0jp3kux13enq::::res://attack_box.tscn<>res://hurtbox.gd<>res://fsm.gd
 basic_enemy_template.gd::GDScript::-1::1729978868::0::1::::BasicEnemy<>CharacterBody2D<>::
 boss_room.gd::GDScript::-1::1729978868::0::1::::<>Node2D<>::
 boss_room.tscn::PackedScene::7328442712214914809::1729550968::0::1::::<><>::res://boss_room.gd
 bottom_door.gd::GDScript::-1::1729978868::0::1::::<>Node2D<>::
 bottom_door.tscn::PackedScene::2168298611325814737::1729550968::0::1::::<><>::res://bottom_door.gd<>uid://brdac6k6cyxh5::::res://lpc-doors-animated-1.png
+Boxes.png::CompressedTexture2D::8656946940454844023::1730340230::1730340231::1::::<><>::
 chest_room.gd::GDScript::-1::1729978869::0::1::::<>Node2D<>::
 chest_room.tscn::PackedScene::3862870750532413007::1729550968::0::1::::<><>::res://chest_room.gd
 corridor_drawer.gd::GDScript::-1::1729978869::0::1::::<>Node2D<>::
-detection_area.tscn::PackedScene::6723965606816589184::1729986232::0::1::::<><>::
+detection_area.tscn::PackedScene::6723965606816589184::1730339145::0::1::::<><>::
 Door_animations.tscn::PackedScene::8442363966725407712::1729550968::0::1::::<><>::
 Dungeon Path update.png::CompressedTexture2D::7296064056177138908::1729550968::1730052426::1::::<><>::
 DungeonTile.png::CompressedTexture2D::3198961301177248424::1729550968::1730052426::1::::<><>::
-Dungeon_gen.tres::TileSet::7854913436611557643::1729981699::0::1::::<><>::uid://bltuopujka5hc::::res://DungeonTile.png<>uid://db7jdybt8r0q7::::res://Dungeon Path update.png
+Dungeon_gen.tres::TileSet::7854913436611557643::1730315716::0::1::::<><>::uid://bltuopujka5hc::::res://DungeonTile.png<>uid://db7jdybt8r0q7::::res://Dungeon Path update.png
 enemytest.tscn::PackedScene::4422415154237143999::1729550968::0::1::::<><>::uid://b3d521x5xiew2::::res://Monster Creature Pack/wraith.png
 enemy_spawn.gd::GDScript::-1::1729978869::0::1::::<>Node2D<>::
 enemy_spawn.tscn::PackedScene::4667111213129863547::1729550968::0::1::::<><>::uid://dt0f60nyua6kl::::res://Spawn animation.png<>res://enemy_spawn.gd
 fireball.gd::GDScript::-1::1729978876::0::1::::<>Projectile<>::
-fireball.tscn::PackedScene::3746956620569377362::1729986232::0::1::::<><>::uid://bukukm4ho2lh::::res://projectile_template.tscn<>res://fireball.gd<>uid://d0v81rs3n02mx::::res://Monster Creature Pack/fire_skull_fireball.png
+fireball.tscn::PackedScene::3746956620569377362::1730339145::0::1::::<><>::uid://bukukm4ho2lh::::res://projectile_template.tscn<>res://fireball.gd<>uid://d0v81rs3n02mx::::res://Monster Creature Pack/fire_skull_fireball.png
 firey_attack_state.gd::GDScript::-1::1729978876::0::1::::FireyAttackState<>State<>::
 firey_die_state.gd::GDScript::-1::1729978869::0::1::::<>State<>::
 firey_follow_state.gd::GDScript::-1::1729978869::0::1::::FireyFollowState<>State<>::
 firey_run_state.gd::GDScript::-1::1729978869::0::1::::<>State<>::
 fire_ball.gd::GDScript::-1::1729978869::0::1::::<>CharacterBody2D<>::
-fire_ball.tscn::PackedScene::8817236713891695874::1729986231::0::1::::<><>::uid://b4wpmxmaqv5sv::::res://basic_enemy.tscn<>res://fire_ball.gd<>uid://da4kindmrx61t::::res://Monster Creature Pack/fire_skull.png<>uid://1mlwak56lwpt::::res://light.png<>res://firey_attack_state.gd<>uid://c22ey4hsh37ya::::res://detection_area.tscn<>res://firey_die_state.gd<>res://firey_follow_state.gd<>res://firey_run_state.gd<>res://hurt_state.gd
-fsm.gd::GDScript::-1::1729978869::0::1::::FiniteStateMachine<>Node<>::
+fire_ball.tscn::PackedScene::8817236713891695874::1730339144::0::1::::<><>::uid://b4wpmxmaqv5sv::::res://basic_enemy.tscn<>res://fire_ball.gd<>uid://da4kindmrx61t::::res://Monster Creature Pack/fire_skull.png<>uid://1mlwak56lwpt::::res://light.png<>res://firey_attack_state.gd<>uid://c22ey4hsh37ya::::res://detection_area.tscn<>res://firey_die_state.gd<>res://firey_follow_state.gd<>res://firey_run_state.gd<>res://hurt_state.gd
+fsm.gd::GDScript::-1::1730316356::0::1::::FiniteStateMachine<>Node<>::
 HealthBar.gd::GDScript::-1::1729550968::0::1::::<>TextureProgressBar<>::
 health_bar.png::CompressedTexture2D::3034104808949175000::1729550968::1730052426::1::::<><>::
 health_bar.tscn::PackedScene::2971159956551738765::1729550968::0::1::::<><>::uid://yuhk5jyj7qy0::::res://health_bar_progress.png<>uid://yuhk5jyj7qy0::::res://health_bar_progress.png<>res://HealthBar.gd
@@ -36,9 +37,9 @@ health_bar_enemy.png::CompressedTexture2D::5161400123511110087::1729550968::1730
 health_bar_progress.png::CompressedTexture2D::1726264269989885273::1729550968::1730052426::1::::<><>::
 heart.png::CompressedTexture2D::6386238324638765276::1729550968::1730052426::1::::<><>::
 Horizontal_door.png::CompressedTexture2D::4107575603670325848::1729550968::1730052426::1::::<><>::
-hurtbox.gd::GDScript::-1::1729978869::0::1::::HurtBox<>Area2D<>::
+hurtbox.gd::GDScript::-1::1730316458::0::1::::HurtBox<>Area2D<>::
 hurtbox.tscn::PackedScene::8621076499024425310::1729550968::0::1::::<><>::res://hurtbox.gd
-hurt_state.gd::GDScript::-1::1729978869::0::1::::<>State<>::
+hurt_state.gd::GDScript::-1::1730323954::0::1::::<>State<>::
 icon.svg::CompressedTexture2D::7907226625333941724::1729550968::1730052426::1::::<><>::
 iron-whoosh-47121.mp3::AudioStreamMP3::7726577243777304051::1729550968::1730052426::1::::<><>::
 lantern.tscn::PackedScene::9071129839271943938::1729550968::0::1::::<><>::uid://dyl07qagv766x::::res://Lantern_anim.png
@@ -51,34 +52,41 @@ lpc-doors-animated-1.png::CompressedTexture2D::3585829375473680296::1729550968::
 lpc-doors-animated-top-export.png::CompressedTexture2D::6856969451299322326::1729550968::1730052426::1::::<><>::
 map_generation.gd::GDScript::-1::1729978870::0::1::::<>Node2D<>::
 Map_generation.tscn::PackedScene::3845548813357122085::1729550968::0::1::::<><>::res://map_generation.gd<>uid://dj58jn31qyjv4::::res://Dungeon_gen.tres
-player.gd::GDScript::-1::1729978870::0::1::::<>CharacterBody2D<>::
+player.gd::GDScript::-1::1730338247::0::1::::<>CharacterBody2D<>::
 player.tres::SpriteFrames::8277744555890111397::1729550968::0::1::::<><>::uid://b3g3dcgdawv1y::::res://mystic_woods_free_2.2/sprites/characters/player.png
-player.tscn::PackedScene::3817894469793302620::1729986231::0::1::::<><>::res://player.gd<>uid://b3g3dcgdawv1y::::res://mystic_woods_free_2.2/sprites/characters/player.png<>uid://c0jp3kux13enq::::res://attack_box.tscn<>uid://du3d4uftlgwlq::::res://hurtbox.tscn<>res://fsm.gd<>uid://d2ieghykeis8y::::res://lantern.tscn<>uid://b8mr028ig37l0::::res://slash-21834.mp3
+player.tscn::PackedScene::3817894469793302620::1730339144::0::1::::<><>::res://player.gd<>uid://b3g3dcgdawv1y::::res://mystic_woods_free_2.2/sprites/characters/player.png<>uid://c0jp3kux13enq::::res://attack_box.tscn<>uid://du3d4uftlgwlq::::res://hurtbox.tscn<>res://fsm.gd<>uid://d2ieghykeis8y::::res://lantern.tscn<>uid://b8mr028ig37l0::::res://slash-21834.mp3
 projectile.gd::GDScript::-1::1729978876::0::1::::Projectile<>Area2D<>::
-projectile_template.tscn::PackedScene::112119829623708393::1729986231::0::1::::<><>::
-right_door.gd::GDScript::-1::1729978878::0::1::::<>Node2D<>::
-right_door.tscn::PackedScene::8591942709503463999::1729986232::0::1::::<><>::res://right_door.gd<>uid://byr0f1umgh5jw::::res://Horizontal_door.png<>uid://dic2ulxcsobkl::::res://iron-whoosh-47121.mp3
+projectile_template.tscn::PackedScene::112119829623708393::1730339144::0::1::::<><>::
+HealthUI.tscn::PackedScene::4169884846120595125::1730339145::0::1::::<><>::res://health_ui.gd
+health_ui.gd::GDScript::-1::1730339144::0::1::::<>CanvasLayer<>::
+Heart.tscn::PackedScene::4654653094015389118::1730339145::0::1::::<><>::uid://cw8soap04saeu::::res://heart.png
+ActivatableBox.tscn::PackedScene::6935350782757014711::1730339444::0::1::::<><>::
+MainUI.tscn::PackedScene::6555371663119611006::1730339413::0::1::::<><>::
+WeaponBox.tscn::PackedScene::265393277856726417::1730339443::0::1::::<><>::
+right_door.gd::GDScript::-1::1730066872::0::1::::<>Node2D<>::
+right_door.tscn::PackedScene::8591942709503463999::1730339145::0::1::::<><>::res://right_door.gd<>uid://byr0f1umgh5jw::::res://Horizontal_door.png<>uid://dic2ulxcsobkl::::res://iron-whoosh-47121.mp3
+room_detection.gd::GDScript::-1::1730316091::0::1::::<>Area2D<>::
+room_detection.tscn::PackedScene::8713334389800153850::1730339145::0::1::::<><>::res://room_detection.gd
 shop_room.gd::GDScript::-1::1729978870::0::1::::<>Node2D<>::
 shop_room.tscn::PackedScene::4963867977466647133::1729550968::0::1::::<><>::
 slash-21834.mp3::AudioStreamMP3::4728503360003178255::1729550968::1730052426::1::::<><>::
 Spawn animation.png::CompressedTexture2D::8544819802911721051::1729550968::1730052426::1::::<><>::
 test script.gd::GDScript::-1::1729550968::0::1::::<>Node<>::
-tile_map.gd::GDScript::-1::1729978876::0::1::::<>TileMap<>::
-tile_map.tscn::PackedScene::9065557505614166551::1729986231::0::1::::<><>::uid://dj58jn31qyjv4::::res://Dungeon_gen.tres<>res://tile_map.gd<>uid://dcn7m7f3npdg0::::res://boss_room.tscn<>uid://ccysgeq22psw8::::res://shop_room.tscn<>uid://1mlwak56lwpt::::res://light.png<>uid://bvbg6f6nq5lgh::::res://chest_room.tscn<>res://shop_room.gd<>uid://bunoftyokcv2c::::res://player.tscn
-top_door.gd::GDScript::-1::1729978870::0::1::::<>Node2D<>::
-top_door.tscn::PackedScene::7848507186026377223::1729986232::0::1::::<><>::res://top_door.gd<>uid://dmqjcr0sxhaag::::res://Vertical_door.png<>uid://dic2ulxcsobkl::::res://iron-whoosh-47121.mp3
-UI.tscn::PackedScene::4169884846120595125::1729550968::0::1::::<><>::uid://cw8soap04saeu::::res://heart.png
+tile_map.gd::GDScript::-1::1730328246::0::1::::<>TileMap<>::
+tile_map.tscn::PackedScene::9065557505614166551::1730339144::0::1::::<><>::uid://dj58jn31qyjv4::::res://Dungeon_gen.tres<>res://tile_map.gd<>uid://dcn7m7f3npdg0::::res://boss_room.tscn<>uid://ccysgeq22psw8::::res://shop_room.tscn<>uid://1mlwak56lwpt::::res://light.png<>uid://bvbg6f6nq5lgh::::res://chest_room.tscn<>res://shop_room.gd<>uid://bunoftyokcv2c::::res://player.tscn<>uid://b0n6nnxfmc8ab::::res://HealthUI.tscn
+top_door.gd::GDScript::-1::1730327856::0::1::::<>Node2D<>::
+top_door.tscn::PackedScene::7848507186026377223::1730339145::0::1::::<><>::res://top_door.gd<>uid://dmqjcr0sxhaag::::res://Vertical_door.png<>uid://dic2ulxcsobkl::::res://iron-whoosh-47121.mp3
 Vertical_door.png::CompressedTexture2D::8035109175689267502::1729550968::1730052426::1::::<><>::
-wraith.gd::GDScript::-1::1729978870::0::1::::<>CharacterBody2D<>::
-wraith.tscn::PackedScene::4627430305159113187::1729986231::0::1::::<><>::res://wraith.gd<>uid://b3d521x5xiew2::::res://Monster Creature Pack/wraith.png<>uid://c0jp3kux13enq::::res://attack_box.tscn<>uid://du3d4uftlgwlq::::res://hurtbox.tscn<>res://fsm.gd<>uid://c22ey4hsh37ya::::res://detection_area.tscn<>uid://bilitnmybkklp::::res://health_bar.tscn<>res://hurt_state.gd<>res://wraith_run_state.gd<>res://wraith_attack_state.gd<>res://wraith_follow_state.gd<>res://wraith_die_state.gd
-wraith_attack_state.gd::GDScript::-1::1729978870::0::1::::AttackState<>State<>::
-wraith_die_state.gd::GDScript::-1::1729978871::0::1::::<>State<>::
-wraith_follow_state.gd::GDScript::-1::1729978871::0::1::::FollowState<>State<>::
-wraith_run_state.gd::GDScript::-1::1729978871::0::1::::<>State<>::
-::res://Monster Creature Pack/::1729986232
+wraith.gd::GDScript::-1::1730327182::0::1::::<>CharacterBody2D<>::
+wraith.tscn::PackedScene::4627430305159113187::1730339145::0::1::::<><>::res://wraith.gd<>uid://b3d521x5xiew2::::res://Monster Creature Pack/wraith.png<>uid://c0jp3kux13enq::::res://attack_box.tscn<>uid://du3d4uftlgwlq::::res://hurtbox.tscn<>res://fsm.gd<>uid://c22ey4hsh37ya::::res://detection_area.tscn<>uid://bilitnmybkklp::::res://health_bar.tscn<>res://hurt_state.gd<>res://wraith_run_state.gd<>res://wraith_attack_state.gd<>res://wraith_follow_state.gd<>res://wraith_die_state.gd
+wraith_attack_state.gd::GDScript::-1::1730316329::0::1::::AttackState<>State<>::
+wraith_die_state.gd::GDScript::-1::1730325923::0::1::::<>State<>::
+wraith_follow_state.gd::GDScript::-1::1730316315::0::1::::FollowState<>State<>::
+wraith_run_state.gd::GDScript::-1::1730316486::0::1::::<>State<>::
+::res://Monster Creature Pack/::1730339145
 dud_fireball.gd::GDScript::-1::1729550968::0::1::::<>AnimatedSprite2D<>::
 fireball.png::CompressedTexture2D::6177397783930352918::1729550968::1730052426::1::::<><>::
-fireball.tscn::PackedScene::1805546557977449585::1729986232::0::1::::<><>::uid://cuam3r371uyhi::::res://Monster Creature Pack/fireball.png
+fireball.tscn::PackedScene::1805546557977449585::1730339145::0::1::::<><>::uid://cuam3r371uyhi::::res://Monster Creature Pack/fireball.png
 fireball_explosion.gd::GDScript::-1::1729550968::0::1::::<>AnimatedSprite2D<>::
 fireball_explosion.tscn::PackedScene::8958773450560946494::1729550968::0::1::::<><>::uid://byr418e5goyt3::::res://graphics/spritesheets/explosion_sprite_sheet.png<>res://scripts/player/fireball_explosion.gd
 fire_skull.png::CompressedTexture2D::7219751150232789131::1729550968::1730052426::1::::<><>::
@@ -91,18 +99,18 @@ skelly.png::CompressedTexture2D::2780609396200847718::1729550968::1730052426::1:
 slime.png::CompressedTexture2D::3187666355811793854::1729550968::1730052426::1::::<><>::
 wraith.png::CompressedTexture2D::4359772567570336839::1729550968::1730052426::1::::<><>::
 zombie.png::CompressedTexture2D::5826847824058459237::1729550968::1730052426::1::::<><>::
-::res://mystic_woods_free_2.2/::1729551060
+::res://mystic_woods_free_2.2/::1730052426
 icon.svg::CompressedTexture2D::7768576044400067917::1729550968::1730052426::1::::<><>::
 read_me.txt::TextFile::-1::1729550968::0::1::::<><>::
 ::res://mystic_woods_free_2.2/sprites/::1729550968
-::res://mystic_woods_free_2.2/sprites/characters/::1729551060
+::res://mystic_woods_free_2.2/sprites/characters/::1730052426
 player-export.png::CompressedTexture2D::5727281293739546480::1729550968::1730052426::1::::<><>::
 player.png::CompressedTexture2D::4365800119714265072::1729550968::1730052426::1::::<><>::
 README.txt::TextFile::-1::1729550968::0::1::::<><>::
 skeleton.png::CompressedTexture2D::6526655331730728962::1729550968::1730052426::1::::<><>::
 skeleton_swordless.png::CompressedTexture2D::301094865501880968::1729550968::1730052426::1::::<><>::
 slime.png::CompressedTexture2D::3024989798565919955::1729550968::1730052426::1::::<><>::
-::res://mystic_woods_free_2.2/sprites/objects/::1729551061
+::res://mystic_woods_free_2.2/sprites/objects/::1730052426
 chest_01.png::CompressedTexture2D::7389581457210934017::1729550968::1730052426::1::::<><>::
 chest_02.png::CompressedTexture2D::1033776418490050814::1729550968::1730052426::1::::<><>::
 objects.png::CompressedTexture2D::360315581437860492::1729550968::1730052426::1::::<><>::
@@ -114,9 +122,9 @@ rock_in_water_03.png::CompressedTexture2D::970318525826163314::1729550968::17300
 rock_in_water_04.png::CompressedTexture2D::4920053113117619679::1729550968::1730052426::1::::<><>::
 rock_in_water_05.png::CompressedTexture2D::1080157909438313375::1729550968::1730052426::1::::<><>::
 rock_in_water_06.png::CompressedTexture2D::4804994515511745319::1729550968::1730052426::1::::<><>::
-::res://mystic_woods_free_2.2/sprites/particles/::1729551060
+::res://mystic_woods_free_2.2/sprites/particles/::1730052426
 dust_particles_01.png::CompressedTexture2D::6486833903078799016::1729550968::1730052426::1::::<><>::
-::res://mystic_woods_free_2.2/sprites/tilesets/::1729551060
+::res://mystic_woods_free_2.2/sprites/tilesets/::1730052426
 decor_8x8.png::CompressedTexture2D::455352586207331366::1729550968::1730052426::1::::<><>::
 decor_16x16.png::CompressedTexture2D::2729456048184648798::1729550968::1730052426::1::::<><>::
 fences.png::CompressedTexture2D::8563954790436796192::1729550968::1730052426::1::::<><>::
@@ -131,11 +139,11 @@ water6.png::CompressedTexture2D::677193662793534449::1729550968::1730052426::1::
 water-sheet.png::CompressedTexture2D::1991185313445385659::1729550968::1730052426::1::::<><>::
 water_decorations.png::CompressedTexture2D::201954652472027446::1729550968::1730052426::1::::<><>::
 water_lillies.png::CompressedTexture2D::4844448326760653969::1729550968::1730052426::1::::<><>::
-::res://mystic_woods_free_2.2/sprites/tilesets/floors/::1729551060
+::res://mystic_woods_free_2.2/sprites/tilesets/floors/::1730052426
 carpet.png::CompressedTexture2D::7466617185954368578::1729550968::1730052426::1::::<><>::
 flooring.png::CompressedTexture2D::7409624103629251723::1729550968::1730052426::1::::<><>::
 wooden.png::CompressedTexture2D::831176031775514259::1729550968::1730052426::1::::<><>::
-::res://mystic_woods_free_2.2/sprites/tilesets/walls/::1729551060
+::res://mystic_woods_free_2.2/sprites/tilesets/walls/::1730052426
 walls.png::CompressedTexture2D::1566552209690963929::1729550968::1730052426::1::::<><>::
 wooden_door.png::CompressedTexture2D::3482855995479739644::1729550968::1730052426::1::::<><>::
 wooden_door_b.png::CompressedTexture2D::5286971646053101712::1729550968::1730052426::1::::<><>::

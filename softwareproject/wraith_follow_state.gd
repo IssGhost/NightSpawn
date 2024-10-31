@@ -5,10 +5,10 @@ class_name FollowState
 var speed: float = 75.0  # Speed when following the player
 
 func enter_state(_previous_state: State):
-	print("Entering FollowState")
+	#print("Entering FollowState")
 	if actor.player:
-		print("Player detected, following...")
-
+		#print("Player detected, following...")
+		pass
 	# Set the appropriate walking animation based on player's direction
 	move_towards_player(0)
 
@@ -21,7 +21,7 @@ func physics_update(delta: float):
 	move_towards_player(delta)
 	# If player leaves detection area, transition back to RunState
 	if not actor.player_in_range:
-		print("Player out of range, switching back to RunState")
+		#print("Player out of range, switching back to RunState")
 		transition.emit("RunState")
 	if actor.player:
 		# Check if the player is within attack range

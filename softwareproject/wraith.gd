@@ -1,4 +1,5 @@
 extends CharacterBody2D
+signal defeated
 
 # Health properties
 @export var max_health: int = 50
@@ -34,6 +35,9 @@ var player_in_range: bool = false
 @export var attack_range: float = 100.0  # Set a default value for attack range
 
 func _ready():
+	add_to_group("enemy")
+	
+	
 	if attack_box:
 		attack_box.connect("body_entered", Callable(self, "_on_attack_box_entered"))
 		attack_box.connect("body_exited", Callable(self, "_on_attack_box_exited"))
@@ -91,7 +95,7 @@ func move_and_update_direction(delta: float):
 
 func take_damage(amount: int):
 	if is_invulnerable:
-		print("Wraith is invulnerable and cannot take damage!")
+		#print("Wraith is invulnerable and cannot take damage!")
 		return
 
 	current_health -= amount
@@ -107,6 +111,8 @@ func take_damage(amount: int):
 	if current_health <= 0:
 		print("Health depleted, transitioning to DieState")
 		if fsm and fsm.has_method("transition"):
+			emit_signal("defeated", self)
+			print("Defeated signal emitted for", self)
 			fsm.transition("DieState")  # Transition to the DieState
 	else:
 		# Otherwise, transition to HurtState
@@ -122,25 +128,25 @@ func _on_detection_area_entered(body: Node):
 	if body.is_in_group("player"):  # Ensure the body is the player
 		player_in_range = true
 		player = body  # Set the player reference
-		print("Player entered detection area")
+		#print("Player entered detection area")
 	else:
-		print("Non-player body entered detection area")
-
+		#print("Non-player body entered detection area")
+		pass
 # Player exit logic (when they leave the detection area)
 func _on_detection_area_exited(body: Node):
 	if body.is_in_group("player"):
 		player_in_range = false
-		print("Player exited detection area")
+		#print("Player exited detection area")
 
 func _on_attack_box_entered(body: Node):
 	if body.is_in_group("player"):  # Ensure it's the player entering the attack box
 		player_in_attack_range = true
-		print("Player entered attack range")
+		#print("Player entered attack range")
 
 func _on_attack_box_exited(body: Node):
 	if body.is_in_group("player"):  # Ensure it's the player leaving the attack box
 		player_in_attack_range = false
-		print("Player left attack range")
+		#print("Player left attack range")
 # Function to turn the Wraith to face the player
 func turn_to_player():
 	if player:
@@ -149,9 +155,9 @@ func turn_to_player():
 			last_direction = Vector2.RIGHT if direction_to_player.x > 0 else Vector2.LEFT
 		else:
 			last_direction = Vector2.DOWN if direction_to_player.y > 0 else Vector2.UP
-		print("Wraith is now facing the player")
+		#print("Wraith is now facing the player")
 
 # Invulnerability timer timeout handler
 func _on_invul_timer_timeout():
 	is_invulnerable = false
-	print("Wraith is no longer invulnerable")
+	#print("Wraith is no longer invulnerable")

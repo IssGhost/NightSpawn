@@ -16,6 +16,8 @@ const ZOOM_SPEED = 0.5  # Speed for zooming the camera
 var boss_label
 var shop_label
 var chest_label
+var all_doors = []  # Store references to all doors in the dungeon
+
 # Global dictionary to store Area2D references for each room
 var room_area_detectors = {}
 
@@ -29,52 +31,59 @@ class Room:
 	var id
 	var rect
 	var connections = []
-	var enemies = []
+	var enemies: Array = []
 	var doors = []
 	var visited = false
 	
 	func _init(_id, _rect):
 		id = _id
 		rect = _rect
-		
-	func has_enemies() -> bool:
-		for enemy in enemies:
-			if enemy != null and enemy.is_alive():
-				return true
-		return false
-	
-	# Method to call when an enemy is defeated
+	func add_enemy(enemy):
+		enemies.append(enemy)  # Method to add enemy to the room
+		print("Added enemy to room", id, ". Current count:", enemies.size())
+
 	func enemy_died(enemy):
-		enemies.erase(enemy)
+		if enemies.has(enemy):
+			enemies.erase(enemy)
 		if not has_enemies():
-			unlock_doors()  # Unlock doors when all enemies are defeated
-			print("All enemies defeated in room", id)
+			self.unlock_all_doors()  
+	
+	func has_enemies() -> bool:
+		return enemies.size() > 0
+		
+	func get_enemy_info() -> Dictionary:
+		return {
+			"count": enemies.size(),
+			"enemies": enemies  # Returns the list of enemies
+		}
+	func get_enemy_count() -> int:
+		return enemies.size()  # Returns the current count of enemies
 
-	# Lock doors to prevent player from leaving
-	func lock_doors():
-		for door in doors:
-			door.lock()
-		print("Doors locked for room", id)
+	func get_enemy_list() -> Array:
+		return enemies  # Returns the list of enemies
+		
 
-	# Unlock doors once all enemies are defeated
-	func unlock_doors():
-		for door in doors:
-			door.unlock()
-		print("Doors unlocked for room", id)
+func lock_all_doors():
+	for door in all_doors:
+		door.lock()
+	print("All doors locked.")
 
+func unlock_all_doors():
+	for door in all_doors:
+		door.unlock()
+	print("All doors unlocked.")
+	
 func _on_enemy_defeated(enemy):
+	print("Defeated signal received from:", enemy)
 	var room = get_room_for_enemy(enemy)
 	if room:
-		room.enemies.erase(enemy)
-		print("Enemy defeated in room", room.id, ". Remaining enemies:", room.enemies.size())
-
-		# If no enemies are left, unlock the doors
-		if room.enemies.size() == 0:
-			room.unlock_doors()
-			print("All enemies defeated in room", room.id, ". Doors unlocked.")
+		room.enemy_died(enemy)
+		# Check if any room has enemies left after this enemy is removed
+		if not any_room_has_enemies():
+			self.unlock_all_doors()  # Unlock all doors if no enemies remain
+			print("All enemies defeated in all rooms. All doors unlocked.")
 	else:
-		print("Error: Room not found for defeated enemy.")
-
+		print("Enemy's room not found.")
 
 
 # Union-Find class for Kruskal's algorithm
@@ -302,40 +311,52 @@ var enemy_scenes = {
 	"Zombie": null  # Placeholder for future enemy scene
 }
 
-
 func spawn_enemies_in_room(room: Room):
-	if room.enemies.size() > 0:
+	if room.has_enemies():
 		print("Enemies already spawned in room", room.id)
 		return  # Avoid spawning again if enemies already exist
 
 	print("Spawning enemies in room", room.id)
 
-	# Number of enemies to spawn in this room
-	var enemy_count = randi_range(6, 12)
-
-	# Reference for where to add enemies
-	var enemy_container = self  # Using the current node as the container
+	var enemy_count = randi_range(3, 6)
 
 	for i in range(enemy_count):
-		# Get a random position within the room's bounds
 		var spawn_x = int(randf_range(room.rect.position.x + 1, room.rect.position.x + room.rect.size.x - 1))
 		var spawn_y = int(randf_range(room.rect.position.y + 1, room.rect.position.y + room.rect.size.y - 1))
 
-		# Choose an enemy based on probabilities
 		var enemy_scene = choose_enemy_based_on_probability()
 
-		# Spawn an enemy using an animation sequence if the enemy scene is available
 		if enemy_scene != null:
-			var spawn_instance = enemy_spawn_scene.instantiate()
-			spawn_instance.position = Vector2(spawn_x, spawn_y) * 32
-			enemy_container.add_child(spawn_instance)
-			
-			spawn_instance.start_spawn_process(enemy_scene)
-			# Track the spawned enemy in the room's enemy list
-			room.enemies.append(spawn_instance)
-			print("Spawned enemy in room", room.id, "at position:", spawn_instance.position)
+			var enemy_instance = enemy_scene.instantiate()
+			enemy_instance.position = Vector2(spawn_x, spawn_y) * 32
+			room.add_enemy(enemy_instance)  # Add enemy to the room
+			enemy_instance.call_deferred("connect", "defeated", Callable(self, "_on_enemy_defeated"))
+			add_child(enemy_instance)
+
+			print("Spawned enemy in room", room.id, "at position:", enemy_instance.position)
 		else:
 			print("Error: No valid enemy scene to instantiate.")
+
+	print("Total enemies in room", room.id, ":", room.get_enemy_count())
+	print("Enemies in room", room.id, ":", room.get_enemy_list())
+
+
+
+
+# Assuming `spawn_instance` is the spawn animation and `enemy_instance` is the actual enemy
+func _on_spawn_animation_finished(spawn_instance):
+	var enemy_instance = spawn_instance.enemy  # Reference to the enemy
+	if enemy_instance:
+		enemy_instance.position = spawn_instance.position
+		# Update the enemy position in the game logic
+		# Optionally, signal or notify the room manager
+		notify_room_about_enemy_position(enemy_instance)
+func notify_room_about_enemy_position(enemy_instance):
+	var room = get_room_for_enemy(enemy_instance)
+	if room:
+		# Update the tracking information here
+		print("Updating position for enemy in room:", room.id, "to", enemy_instance.position)
+
 
 func get_room_for_area2d(area2d: Area2D) -> Room:
 	if room_area_detectors.has(area2d):
@@ -343,12 +364,14 @@ func get_room_for_area2d(area2d: Area2D) -> Room:
 	print("No matching room found for the Area2D. Total rooms checked:", room_area_detectors.size())
 	return null
 
-# Function to find the room an enemy belongs to
 func get_room_for_enemy(enemy) -> Room:
+	# Loop through each room and check if the enemy is in the room's enemies array
 	for room in root_leaf.rooms:
-		if enemy in room.enemies:
+		if room.enemies.has(enemy):
 			return room
 	return null
+
+
 
 @onready var area2d_container: Node2D = $TileMap/Area2DContainer
 @onready var detection_area_scene = preload("res://room_detection.tscn")
@@ -369,12 +392,11 @@ func add_area2d_to_room(room: Room):
 
 	# Connect the custom player_entered signal
 	detection_area.connect("player_entered", Callable(self, "_on_player_entered_room"))
+	detection_area.connect("enemy_exited", Callable(self, "_on_enemy_defeated"))
 
 	# Map the DetectionArea to the room
 	room_area_detectors[detection_area] = room
 	print("Created Area2D for room ID:", room.id)
-
-
 
 
 func _on_player_entered_room(room_id):
@@ -385,13 +407,20 @@ func _on_player_entered_room(room_id):
 
 	if not room.visited:
 		room.visited = true
-		room.lock_doors()  # Lock doors when entering
-		spawn_enemies_in_room(room)
-		print("Room", room_id, "locked and enemies spawned.")
+		spawn_enemies_in_room(room)  # Spawn enemies if needed
+
+		if any_room_has_enemies():  # Check if any room has enemies
+			lock_all_doors()  # Lock all doors if enemies are present
+			print("All doors locked due to enemies.")
 	else:
 		print("Room already visited:", room_id)
 
-
+func any_room_has_enemies() -> bool:
+	for room in root_leaf.rooms:
+		if room.has_enemies():
+			return true
+	return false
+	
 func add_door_to_room(room: Room, door_instance: Node2D):
 	if room:
 		room.doors.append(door_instance)
@@ -412,9 +441,6 @@ func print_room_mappings():
 	for area2d in room_area_detectors.keys():
 		var room = room_area_detectors[area2d]
 		print("Area2D:", area2d, "Room ID:", room.id, "Position:", area2d.position)
-
-
-
 
 
 func choose_enemy_based_on_probability() -> PackedScene:
@@ -456,11 +482,16 @@ func _ready():
 	# Set the room labels after the dungeon is generated
 	set_room_labels()
 	spawn_character_in_room()
+	
 
+	
 	# Add Area2D detectors for each room based on room dimensions
 	for room in root_leaf.rooms:
 		add_area2d_to_room(room)
-
+	for room in root_leaf.rooms:
+		var enemy_info = room.get_enemy_info()
+		print("Initial state for room", room.id, ": Total enemies:", enemy_info["count"])
+		print("Enemies in room", room.id, ":", enemy_info["enemies"])
 	print("Dungeon setup complete.")
 	print_room_mappings()
 
