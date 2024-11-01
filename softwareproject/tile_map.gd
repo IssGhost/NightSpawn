@@ -1,5 +1,8 @@
 extends TileMap  # This needs to be attached to a TileMap node
 
+signal lock_doors
+signal unlock_doors
+	
 var top_door_scene = preload("res://top_door.tscn")
 var right_door_scene = preload("res://right_door.tscn")
 # Constants
@@ -34,57 +37,48 @@ class Room:
 	var enemies: Array = []
 	var doors = []
 	var visited = false
-	
+
 	func _init(_id, _rect):
 		id = _id
 		rect = _rect
+
 	func add_enemy(enemy):
-		enemies.append(enemy)  # Method to add enemy to the room
+		enemies.append(enemy)
 		print("Added enemy to room", id, ". Current count:", enemies.size())
 
 	func enemy_died(enemy):
 		if enemies.has(enemy):
 			enemies.erase(enemy)
+			print("Enemy removed from room:", id)
+
+		# Unlock doors if no enemies are left in the room
 		if not has_enemies():
-			self.unlock_all_doors()  
-	
+			get_parent().unlock_doors_in_all_rooms()
+			print("All enemies defeated in room", id, ". Doors unlocked.")
 	func has_enemies() -> bool:
 		return enemies.size() > 0
-		
+
 	func get_enemy_info() -> Dictionary:
 		return {
 			"count": enemies.size(),
-			"enemies": enemies  # Returns the list of enemies
+			"enemies": enemies
 		}
+
 	func get_enemy_count() -> int:
-		return enemies.size()  # Returns the current count of enemies
+		return enemies.size()
 
 	func get_enemy_list() -> Array:
-		return enemies  # Returns the list of enemies
-		
+		return enemies
 
-func lock_all_doors():
-	for door in all_doors:
-		door.lock()
-	print("All doors locked.")
-
-func unlock_all_doors():
-	for door in all_doors:
-		door.unlock()
-	print("All doors unlocked.")
-	
 func _on_enemy_defeated(enemy):
 	print("Defeated signal received from:", enemy)
 	var room = get_room_for_enemy(enemy)
 	if room:
-		room.enemy_died(enemy)
-		# Check if any room has enemies left after this enemy is removed
-		if not any_room_has_enemies():
-			self.unlock_all_doors()  # Unlock all doors if no enemies remain
-			print("All enemies defeated in all rooms. All doors unlocked.")
+		room.enemy_died(enemy)  # Calls the room’s local door management function
+		if any_room_has_enemies():
+			emit_signal("lock_doors")  # Emit lock signal if enemies remain in other rooms
 	else:
 		print("Enemy's room not found.")
-
 
 # Union-Find class for Kruskal's algorithm
 class UnionFind:
@@ -289,7 +283,7 @@ func spawn_character_in_room():
 
 	# Mark the initial room as visited and unlock its doors
 	initial_room.visited = true
-	initial_room.unlock_doors()
+	#initial_room.unlock_doors()
 	print("Player spawned in initial room ", initial_room.id, " at position: ", player.position)
 
 
@@ -409,8 +403,8 @@ func _on_player_entered_room(room_id):
 		room.visited = true
 		spawn_enemies_in_room(room)  # Spawn enemies if needed
 
-		if any_room_has_enemies():  # Check if any room has enemies
-			lock_all_doors()  # Lock all doors if enemies are present
+		if any_room_has_enemies():
+			lock_doors_in_all_rooms()  
 			print("All doors locked due to enemies.")
 	else:
 		print("Room already visited:", room_id)
@@ -915,9 +909,13 @@ func place_corridor_tiles():
 			set_cell(layer, Vector2i(x_start + 3, y_end - 1), 2, Vector2i(17, 7))  # Second row corner
 			set_cell(layer, Vector2i(x_start + 2, y_end), 2, Vector2i(16, 8))  # Third row of the bottom-right corner
 			set_cell(layer, Vector2i(x_start + 3, y_end), 2, Vector2i(17, 8))
+			
+func lock_doors_in_all_rooms():
+	emit_signal("lock_doors")
 
+func unlock_doors_in_all_rooms():
+	emit_signal("unlock_doors")
 
-# Modified spawn_doors function to keep track of the door instances
 func spawn_doors(center: Vector2, is_horizontal: bool):
 	var door_instance
 
@@ -930,12 +928,21 @@ func spawn_doors(center: Vector2, is_horizontal: bool):
 		door_instance = right_door_scene.instantiate() as Node2D
 		door_instance.position = (center + Vector2(0.5, 1.35)) * 32  # Position for right door
 
-	# Add the door instance to the scene and to the appropriate room
+	# Add the door instance to the scene and register it to all_doors
 	add_child(door_instance)
+	all_doors.append(door_instance)
+
+	# Determine the room to which the door belongs
 	var room = get_room_for_area2d(area2d_container)
 	if room:
 		room.doors.append(door_instance)  # Add the door to the room's list of doors
 		print("Added door to room:", room.id)
+
+		# Check if this room is the initial spawn room
+		if room == initial_room:
+			# Unlock the door by default if it's connected to the initial room
+			door_instance.unlock()
+
 
 
 # Camera movement and zooming using WASD and -/= keys
