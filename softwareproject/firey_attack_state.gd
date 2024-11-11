@@ -9,7 +9,7 @@ var cooldown_duration: float = 1.5  # Attack cooldown duration
 var can_attack: bool = true
 
 # Preload the fireball scene
-var fireball_scene = preload("res://fireball.tscn")
+var fireball_scene = preload("res://Scenes/fireball.tscn")
 
 # Called when entering the state
 func enter_state(_previous_state: State):

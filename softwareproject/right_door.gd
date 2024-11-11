@@ -16,27 +16,26 @@ func lock():
 	is_locked = true
 	top_collision.set_disabled(false)
 	bottom_collision.set_disabled(false)
-	#animated_sprite.play("Close")
-	#sound_effect.play()
+
 	print("Door locked")
 
 func unlock():
 	is_locked = false
 	top_collision.set_disabled(true)
 	bottom_collision.set_disabled(true)
-	#animated_sprite.play("Open")
-	#sound_effect.play()
-	print("Door unlocked")
+	print("Door unlocked by signal")
+
 
 
 
 # Function triggered when the player enters the door's detection area
 func _on_Area2D_body_entered(body):
 	if body.is_in_group("player"):
-		if is_locked:
+		if is_locked == true:
 			print("The door is locked. Defeat all enemies to unlock.")
 			return
-
+		if is_locked == false:
+			animated_sprite.play("Open")
 		# Play the unlock animation and sound
 		if not animated_sprite.is_playing():
 			animated_sprite.play("Open")

@@ -3,8 +3,8 @@ extends TileMap  # This needs to be attached to a TileMap node
 signal lock_doors
 signal unlock_doors
 	
-var top_door_scene = preload("res://top_door.tscn")
-var right_door_scene = preload("res://right_door.tscn")
+var top_door_scene = preload("res://Scenes/top_door.tscn")
+var right_door_scene = preload("res://Scenes/right_door.tscn")
 # Constants
 const MAP_WIDTH = 125
 const MAP_HEIGHT = 100
@@ -49,12 +49,12 @@ class Room:
 	func enemy_died(enemy):
 		if enemies.has(enemy):
 			enemies.erase(enemy)
-			print("Enemy removed from room:", id)
+			print("Enemy removed from room:", id, ". Remaining enemies:", enemies.size())
 
-		# Unlock doors if no enemies are left in the room
 		if not has_enemies():
-			get_parent().unlock_doors_in_all_rooms()
-			print("All enemies defeated in room", id, ". Doors unlocked.")
+			print("No enemies left in room", id, ". Unlocking doors.")
+			emit_signal("unlock_doors")
+
 	func has_enemies() -> bool:
 		return enemies.size() > 0
 
@@ -77,6 +77,8 @@ func _on_enemy_defeated(enemy):
 		room.enemy_died(enemy)  # Calls the room’s local door management function
 		if any_room_has_enemies():
 			emit_signal("lock_doors")  # Emit lock signal if enemies remain in other rooms
+		else:
+			emit_signal("unlock_doors")
 	else:
 		print("Enemy's room not found.")
 
@@ -288,20 +290,20 @@ func spawn_character_in_room():
 
 
 
-var enemy_spawn_scene = preload("res://enemy_spawn.tscn")
-var wraith_scene = preload("res://wraith.tscn")
-var firey_scene = preload("res://fire_ball.tscn")
+var enemy_spawn_scene = preload("res://Scenes/enemy_spawn.tscn")
+var wraith_scene = preload("res://Scenes/wraith.tscn")
+var firey_scene = preload("res://Scenes/fire_ball.tscn")
 # Dictionary for enemy spawn probabilities (adjustable values)
 var enemy_probabilities = {
-	"Wraith": 1.0,  # 30% chance to spawn a Wraith
-	"Firey": 0.0,   # Currently set to 0% as a placeholder (set to the desired probability later)
+	"Wraith": 0.5,  # 30% chance to spawn a Wraith
+	"Firey": 0.5,   # Currently set to 0% as a placeholder (set to the desired probability later)
 	"Zombie": 0.0   # Currently set to 0% as a placeholder (set to the desired probability later)
 }
 
 # Dictionary to preload enemy scenes (add scenes as they become available)
 var enemy_scenes = {
-	"Wraith": preload("res://wraith.tscn"),
-	"Firey": preload("res://fire_ball.tscn"),
+	"Wraith": preload("res://Scenes/wraith.tscn"),
+	"Firey": preload("res://Scenes/fire_ball.tscn"),
 	"Zombie": null  # Placeholder for future enemy scene
 }
 
@@ -368,7 +370,7 @@ func get_room_for_enemy(enemy) -> Room:
 
 
 @onready var area2d_container: Node2D = $TileMap/Area2DContainer
-@onready var detection_area_scene = preload("res://room_detection.tscn")
+@onready var detection_area_scene = preload("res://Scenes/room_detection.tscn")
 
 func add_area2d_to_room(room: Room):
 	# Instantiate the DetectionArea scene
@@ -398,16 +400,17 @@ func _on_player_entered_room(room_id):
 	if room == null:
 		print("Room not found for ID:", room_id)
 		return
-
+	
 	if not room.visited:
 		room.visited = true
-		spawn_enemies_in_room(room)  # Spawn enemies if needed
-
-		if any_room_has_enemies():
-			lock_doors_in_all_rooms()  
-			print("All doors locked due to enemies.")
+		spawn_enemies_in_room(room)
+	
+	if room.has_enemies():
+		emit_signal("lock_doors")  # Lock only if there are enemies
+		print("Doors locked in room:", room_id)
 	else:
-		print("Room already visited:", room_id)
+		emit_signal("unlock_doors")
+		print("Doors unlocked immediately, no enemies in room.")
 
 func any_room_has_enemies() -> bool:
 	for room in root_leaf.rooms:
@@ -945,43 +948,43 @@ func spawn_doors(center: Vector2, is_horizontal: bool):
 
 
 
-# Camera movement and zooming using WASD and -/= keys
-func _process(delta):
-	var camera = $Camera2D
-	var move_vector = Vector2()
-
-	# Camera movement with WASD
-	if Input.is_key_pressed(KEY_W):  # Move up
-		move_vector.y -= 1
-	if Input.is_key_pressed(KEY_A):  # Move left
-		move_vector.x -= 1
-	if Input.is_key_pressed(KEY_S):  # Move down
-		move_vector.y += 1
-	if Input.is_key_pressed(KEY_D):  # Move right
-		move_vector.x += 1
-	
-	# Apply the movement
-	camera.position += move_vector * CAMERA_SPEED * delta
-
-	# Camera zooming with - and =
-	if Input.is_key_pressed(KEY_9):  # Zoom out
-		camera.zoom += Vector2(ZOOM_SPEED, ZOOM_SPEED) * delta
-	if Input.is_key_pressed(KEY_0):  # Zoom in (using = key)
-		camera.zoom -= Vector2(ZOOM_SPEED, ZOOM_SPEED) * delta
-
-	# Clamp zoom to avoid excessive zoom in/out (you can adjust these limits)
-	camera.zoom.x = clamp(camera.zoom.x, 0.2, 5)
-	camera.zoom.y = clamp(camera.zoom.y, 0.2, 5)
+## Camera movement and zooming using WASD and -/= keys
+#func _process(delta):
+	#var camera = $Camera2D
+	#var move_vector = Vector2()
+#
+	## Camera movement with WASD
+	#if Input.is_key_pressed(KEY_W):  # Move up
+		#move_vector.y -= 1
+	#if Input.is_key_pressed(KEY_A):  # Move left
+		#move_vector.x -= 1
+	#if Input.is_key_pressed(KEY_S):  # Move down
+		#move_vector.y += 1
+	#if Input.is_key_pressed(KEY_D):  # Move right
+		#move_vector.x += 1
+	#
+	## Apply the movement
+	#camera.position += move_vector * CAMERA_SPEED * delta
+#
+	## Camera zooming with - and =
+	#if Input.is_key_pressed(KEY_9):  # Zoom out
+		#camera.zoom += Vector2(ZOOM_SPEED, ZOOM_SPEED) * delta
+	#if Input.is_key_pressed(KEY_0):  # Zoom in (using = key)
+		#camera.zoom -= Vector2(ZOOM_SPEED, ZOOM_SPEED) * delta
+#
+	## Clamp zoom to avoid excessive zoom in/out (you can adjust these limits)
+	#camera.zoom.x = clamp(camera.zoom.x, 0.2, 5)
+	#camera.zoom.y = clamp(camera.zoom.y, 0.2, 5)
 
 # Handling direct key presses in _input(event) using keycode (Godot 4)
-func _input(event):
-	if event is InputEventKey and event.pressed:
-		match event.keycode:
-			KEY_W:
-				$Camera2D.position.y -= CAMERA_SPEED * get_process_delta_time()
-			KEY_A:
-				$Camera2D.position.x -= CAMERA_SPEED * get_process_delta_time()
-			KEY_S:
-				$Camera2D.position.y += CAMERA_SPEED * get_process_delta_time()
-			KEY_D:
-				$Camera2D.position.x += CAMERA_SPEED * get_process_delta_time()
+#func _input(event):
+	#if event is InputEventKey and event.pressed:
+		#match event.keycode:
+			#KEY_W:
+				#$Camera2D.position.y -= CAMERA_SPEED * get_process_delta_time()
+			#KEY_A:
+				#$Camera2D.position.x -= CAMERA_SPEED * get_process_delta_time()
+			#KEY_S:
+				#$Camera2D.position.y += CAMERA_SPEED * get_process_delta_time()
+			#KEY_D:
+				#$Camera2D.position.x += CAMERA_SPEED * get_process_delta_time()

@@ -1,7 +1,7 @@
-[gd_resource type="TileSet" load_steps=6 format=3 uid="uid://dj58jn31qyjv4"]
+[gd_resource type="TileSet" load_steps=6 format=3 uid="uid://kjm8oeujqkg4"]
 
-[ext_resource type="Texture2D" uid="uid://bltuopujka5hc" path="res://DungeonTile.png" id="1_872se"]
-[ext_resource type="Texture2D" uid="uid://db7jdybt8r0q7" path="res://Dungeon Path update.png" id="2_mpowl"]
+[ext_resource type="Texture2D" uid="uid://ckciiq50kdnww" path="res://DungeonTile.png" id="1_872se"]
+[ext_resource type="Texture2D" uid="uid://sd1pe0mbrf8x" path="res://Dungeon Path update.png" id="2_mpowl"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jcrsx"]
 resource_name = "Wall"

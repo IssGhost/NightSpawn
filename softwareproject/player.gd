@@ -1,112 +1,146 @@
 extends CharacterBody2D
 
+signal health_changed(new_health)  # Signal to notify health changes
+
 @onready var anim: AnimationPlayer = $AnimationPlayer
-@onready var sprite: Sprite2D = $Sprite2D  # Assuming you have a Sprite node named Sprite
-@onready var attack_box: Area2D = $AttackBox  # Assuming you have an Area2D node named AttackBox
-@onready var hurt_box: Area2D = $Hurtbox  # Assuming you have an Area2D node named HurtBox
+@onready var gunanim: AnimationTree = $Node2D/ArGun/AnimationTree
+@onready var sprite: Sprite2D = $Sprite2D
+@onready var attack_box: Area2D = $AttackBox
+@onready var hurt_box: Area2D = $Hurtbox
 @onready var sound_effect = $AudioStreamPlayer2D
 @export var speed = 1000
+@export var attack_damage = 10
+@export var max_health: int = 500
+
+@onready var actionable_finder: Area2D = $Direction/ActionableFinder
+@onready var gun = $Node2D/ArGun
+@export var gun_fire_scene: PackedScene = preload("res://Scenes/gun_fire.tscn")
+
 var current_dir = "none"
 var is_attacking = false
-var attack_damage = 10  # Damage dealt by the player when attacking
-var health_ui
+var is_hurt = false
+var current_health: int = max_health
 
 func _ready():
 	anim.play("front_idle")
 	attack_box.connect("body_entered", Callable(self, "_on_attack_box_body_entered"))
 	anim.connect("animation_finished", Callable(self, "_on_animation_finished"))
 	add_to_group("player")
-	health_ui = get_node("/root/HealthUI")
+	reset_state()
+
+func reset_state():
+	is_attacking = false
+	is_hurt = false
+
 func _physics_process(delta):
-	if not is_attacking:  # Only allow movement if the player is not attacking
+	if not is_attacking and not is_hurt:
 		player_movement(delta)
 
+var gamestart_initial_direction = false
+
 func player_movement(delta):
+	if gamestart_initial_direction == false:
+		current_dir = "down"
+		gamestart_initial_direction = true
 	if Input.is_action_pressed("ui_right"):
 		current_dir = "right"
-		play_anim(1)
-		velocity.x = speed
-		velocity.y = 0
+		velocity = Vector2(speed, 0)
 	elif Input.is_action_pressed("ui_left"):
 		current_dir = "left"
-		play_anim(1)
-		velocity.x = -speed
-		velocity.y = 0
+		velocity = Vector2(-speed, 0)
 	elif Input.is_action_pressed("ui_down"):
 		current_dir = "down"
-		play_anim(1)
-		velocity.y = speed
-		velocity.x = 0
+		velocity = Vector2(0, speed)
 	elif Input.is_action_pressed("ui_up"):
 		current_dir = "up"
-		play_anim(1)
-		velocity.y = -speed
-		velocity.x = 0
+		velocity = Vector2(0, -speed)
 	else:
-		play_anim(0)
 		velocity = Vector2.ZERO
+
+	if velocity != Vector2.ZERO:
+		play_movement_animation()
+	else:
+		play_idle_animation()
 
 	move_and_slide()
 
-func play_anim(movement):
-	if is_attacking:  # Prevent other animations from playing while attacking
+func play_movement_animation():
+	if is_attacking or is_hurt:
 		return
-
-	var dir = current_dir
-
-	if dir == "right":
-		sprite.flip_h = false  # Flipping the sprite to face the right direction
-		if movement == 1:
+	match current_dir:
+		"right":
+			sprite.flip_h = false
 			anim.play("right_walk")
-		else:
-			anim.play("right_idle")
-
-	elif dir == "left":
-		if movement == 1:
+		"left":
 			anim.play("left_walk")
-		else:
-			anim.play("left_idle")
-
-	elif dir == "down":
-		sprite.flip_h = false  # Reset flip for down direction
-		if movement == 1:
+		"down":
 			anim.play("front_walk")
-		else:
-			anim.play("front_idle")
-
-	elif dir == "up":
-		sprite.flip_h = false  # Reset flip for up direction
-		if movement == 1:
+		"up":
 			anim.play("back_walk")
-		else:
+
+func play_idle_animation():
+	if is_attacking or is_hurt:
+		return
+	match current_dir:
+		"right":
+			anim.play("right_idle")
+		"left":
+			anim.play("left_idle")
+		"down":
+			anim.play("front_idle")
+		"up":
 			anim.play("back_idle")
 
 func _input(event):
-	if event.is_action_pressed("attack"):  # This checks for the attack key press
+	if event.is_action_pressed("attack"):
 		attack()
-var sound_is_playing = false
-# Function to handle player attacks
+	if event.is_action_pressed("shoot"):  # Define "shoot" in your input map
+		shoot_gun()
+
+
+func _unhandled_input(_event: InputEvent) -> void:
+	if Input.is_action_just_pressed("dialogue"):
+		print("dialouge")
+		var actionables = actionable_finder.get_overlapping_areas()
+		if actionables.size() > 0:
+			print("dialouge working")
+
+			actionables[0].action()
+			return
+			
+			
+func shoot_gun():
+	if gun == null:
+		print("Error: Gun node not found.")
+		return
+
+	var bullet = gun_fire_scene.instantiate()
+	
+	# Determine bullet direction based on player direction
+	match current_dir:
+		"right":
+			bullet.direction = Vector2(1, 0)
+		"left":
+			bullet.direction = Vector2(-1, 0)
+		"down":
+			bullet.direction = Vector2(0, 1)
+		"up":
+			bullet.direction = Vector2(0, -1)
+
+	# Set the bullet's initial position at the gun's position
+	bullet.global_position = gun.global_position + bullet.direction * gun.gun_length
+
+	# Add the bullet to the current scene
+	get_tree().current_scene.add_child(bullet)
+	
 func attack():
-	if is_attacking:
-		return  # If already attacking, don't start another attack
-	if sound_is_playing == false:
-		var random_pitch = randf_range(0.8, 1.6)  # Adjust pitch scale randomly
-		$AudioStreamPlayer2D.pitch_scale = random_pitch
-		$AudioStreamPlayer2D.play()
-		sound_effect.play()
-		sound_is_playing = true
-	is_attacking = true  # Lock movement while attacking
-	print("Attack started")
+	if is_attacking or is_hurt:
+		return
+	is_attacking = true
 
-	# Activate the attack box when starting an attack
-	attack_box.attacker = self
-	attack_box.activate()
-
-	# Play the attack animation based on the current direction
 	match current_dir:
 		"right":
 			anim.play("right_attack")
-			
 		"left":
 			anim.play("left_attack")
 		"down":
@@ -114,26 +148,62 @@ func attack():
 		"up":
 			anim.play("back_attack")
 
-# Function to handle when an animation finishes playing
+	var attack_timer = Timer.new()
+	attack_timer.wait_time = 0.4
+	attack_timer.one_shot = true
+	add_child(attack_timer)
+	attack_timer.connect("timeout", Callable(self, "_on_attack_timer_timeout"))
+	attack_box.set("enabled", true)
+	attack_timer.start()
+
+func _on_attack_timer_timeout():
+	is_attacking = false
+	attack_box.set("enabled", false)
+
 func _on_animation_finished(animation_name: String):
 	if animation_name.ends_with("attack"):
-		print("Attack finished")
-		is_attacking = false  # Unlock movement after the attack animation is finished
-		sound_is_playing = false
-		# Deactivate the attack box when the attack animation is finished
-		attack_box.deactivate()
+		is_attacking = false
+		attack_box.set("enabled", false)
+	elif animation_name.ends_with("hurt"):
+		is_hurt = false
 
+	play_idle_animation()
 
-# Function to handle damage to other entities when they enter the attack box
 func _on_attack_box_body_entered(body):
-	if body.has_method("take_damage"):
+	if body.has_method("take_damage") and is_attacking:
 		body.take_damage(attack_damage)
 
-# Function to handle taking damage from other entities when the player is hit
 func take_damage(amount: int):
-	# Implement logic to reduce player's health
-	print("Player took damage: ", amount)
-	#health_ui.decrease_health(amount)
-	
-#func heal(amount: int):
-	#health_ui.increase_health(amount)
+	current_health -= amount
+	current_health = clamp(current_health, 0, max_health)
+	is_hurt = true
+	is_attacking = false  # Cancel attack if hurt
+
+	# Emit the health_changed signal to update the UI
+	emit_signal("health_changed", current_health)
+
+	# Play the hurt animation based on direction
+	match current_dir:
+		"right":
+			anim.play("right_hurt")
+		"left":
+			anim.play("left_hurt")
+		"down":
+			anim.play("front_hurt")
+		"up":
+			anim.play("back_hurt")
+
+	# Start a timer to handle hurt state duration
+	var hurt_timer = Timer.new()
+	hurt_timer.wait_time = 0.5
+	hurt_timer.one_shot = true
+	add_child(hurt_timer)
+	hurt_timer.connect("timeout", Callable(self, "_on_hurt_timer_timeout"))
+	hurt_timer.start()
+
+	if current_health <= 0:
+		velocity = Vector2.ZERO
+
+func _on_hurt_timer_timeout():
+	is_hurt = false
+	play_idle_animation()

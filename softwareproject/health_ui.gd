@@ -1,40 +1,44 @@
 extends CanvasLayer
 
-@export var max_health: int = 10  # 3 full hearts (2 health points per heart)
+@export var max_health: int = 10  # e.g., 5 hearts (2 health points per heart)
 var current_health: int = max_health  # Start with full health
-@onready var heart_scene = preload("res://Heart.tscn")  # Path to the Heart scene
-@onready var health_container = $HealthContainer  # Reference to the HBoxContainer
+@onready var heart_scene = preload("res://Scenes/Heart.tscn")
+@onready var health_container = $HealthContainer
+@onready var player = preload("res://Scenes/player.tscn")
 
 func _ready():
-	update_hearts()  # Initialize with full hearts
 
-func update_hearts():
-	# Clear any existing hearts in the health_container
+	if player:
+		player.connect("health_changed", Callable(self, "update_hearts"))
+	else:
+		print("Error: Player node not found. Check the path or ensure it is added to the scene before HealthUI.")
+
+	# Initial setup of hearts
+	update_hearts()
+
+func update_hearts(new_health: int = current_health):
+	current_health = new_health
+	
+	# Clear any existing hearts
 	for child in health_container.get_children():
 		child.queue_free()
 
-	# Calculate the number of hearts we need to display
-	var heart_count = int(max_health / 2)
+	# Total number of hearts to display (each heart represents 2 health points)
+	var heart_count = int(ceil(float(max_health) / 2))
 
-	# Loop to create each heart and set its animation with position offset
+	# Create hearts with correct visuals for each health point
 	for i in range(heart_count):
 		var heart = heart_scene.instantiate()
-		heart.position = Vector2((i * 15)+ 10 , 10)  # Offset each heart by 50 pixels on the x-axis
+		heart.position = Vector2((i * 15) + 10, 10)
 		health_container.add_child(heart)
 
-		# Set the correct animation based on current health
-		if current_health >= (i + 1) * 2:
+		# Calculate the health state for this heart
+		var health_for_this_heart = current_health - (i * 2)
+
+		# Set the heart's animation based on the exact health value
+		if health_for_this_heart >= 2:
 			heart.play("Full")  # Full heart
-		elif current_health == (i * 2) + 1:
+		elif health_for_this_heart == 1:
 			heart.play("Half")  # Half heart
 		else:
 			heart.play("Empty")  # Empty heart
-
-func decrease_health(amount: int):
-	current_health = clamp(current_health - amount, 0, max_health)
-	update_hearts()
-
-# Function to increase health and update the UI
-func increase_health(amount: int):
-	current_health = clamp(current_health + amount, 0, max_health)
-	update_hearts()

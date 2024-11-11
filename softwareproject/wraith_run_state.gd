@@ -3,13 +3,17 @@ extends State
 var speed: float = 100.0
 var direction: Vector2 = Vector2.ZERO
 
+# RunState.gd
 func enter_state(_previous_state: State):
-	#print("Entering RunState")
+	if actor.is_dead:
+		return 
 
-	# Pick a random direction at the start
+	print("Entering RunState")
 	direction = get_random_direction()
 	actor.current_direction = direction
-	#print("Moving in direction: ", direction)
+	move_and_play_animation()
+
+
 
 	move_and_play_animation()
 

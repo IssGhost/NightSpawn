@@ -1,0 +1,52 @@
+[gd_scene load_steps=3 format=3 uid="uid://cbyrnasiw3fqm"]
+
+[ext_resource type="Script" path="res://scripts/StartScreen.gd" id="1_aa1f7"]
+[ext_resource type="Texture2D" uid="uid://cxsi3or3jaifm" path="res://Assets/Nightmare_Spawn_Castle_Entrance1.png" id="1_c1yxj"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_aa1f7")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_c1yxj")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="StartButton" type="Button" parent="Control"]
+layout_mode = 2
+offset_left = 977.0
+offset_top = 987.0
+offset_right = 1017.0
+offset_bottom = 995.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SettingsButton" type="Button" parent="Control"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+offset_left = 977.0
+offset_top = 999.0
+offset_right = 1017.0
+offset_bottom = 1007.0
+
+[node name="SoundButton" type="Button" parent="Control"]
+layout_mode = 2
+offset_left = 977.0
+offset_top = 1011.0
+offset_right = 1017.0
+offset_bottom = 1019.0

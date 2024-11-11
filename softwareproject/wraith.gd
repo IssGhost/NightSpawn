@@ -37,7 +37,6 @@ var player_in_range: bool = false
 func _ready():
 	add_to_group("enemy")
 	
-	
 	if attack_box:
 		attack_box.connect("body_entered", Callable(self, "_on_attack_box_entered"))
 		attack_box.connect("body_exited", Callable(self, "_on_attack_box_exited"))
@@ -93,32 +92,42 @@ func move_and_update_direction(delta: float):
 			Vector2.RIGHT:
 				animator.play("walk_right")
 
+var is_dead: bool = false  # Add this at the top of your script with other variables
+
 func take_damage(amount: int):
-	if is_invulnerable:
-		#print("Wraith is invulnerable and cannot take damage!")
-		return
+	if is_dead or is_invulnerable:
+		return  # Do nothing if already dead or invulnerable
 
 	current_health -= amount
 	current_health = clamp(current_health, 0, max_health)
 	print("Wraith took damage: ", amount, " - Current Health: ", current_health)
 
-	# Trigger invulnerability timer
 	is_invulnerable = true
 	if invul_timer:
 		invul_timer.start()
 
-	# If health is 0 or below, transition to DieState
+	# Immediate transition to DieState if health is zero
 	if current_health <= 0:
-		print("Health depleted, transitioning to DieState")
+		is_dead = true
+		emit_signal("defeated", self)
 		if fsm and fsm.has_method("transition"):
-			emit_signal("defeated", self)
-			print("Defeated signal emitted for", self)
-			fsm.transition("DieState")  # Transition to the DieState
+			fsm.transition("DieState")
+			animator.play("die_left")
+			var death_timer = Timer.new()
+			death_timer.wait_time = 0.4
+			death_timer.one_shot = true
+			death_timer.connect("timeout", Callable(self, "_on_death_timer_timeout"))
+			add_child(death_timer)  # Add timer as a child to this node
+			death_timer.start()  # Start the timer
 	else:
-		# Otherwise, transition to HurtState
+		# Only transition to HurtState if still alive
 		if fsm and fsm.has_method("transition"):
 			fsm.transition("HurtState")
 
+func _on_death_timer_timeout():
+	print("Death timer completed. Queue freeing the Wraith.")
+	queue_free()  # Remove the Wraith from the scene
+	
 # Function to check if the player is in range
 func is_player_in_range() -> bool:
 	return player_in_range
